@@ -1,0 +1,5 @@
+Astatium
+Copyright 2016 Phillip DuLion
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
