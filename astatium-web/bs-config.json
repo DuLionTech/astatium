@@ -1,0 +1,5 @@
+{
+  "port": 9080,
+  "files": ["target/classes/META-INF/resource/**/*.{html,htm,css,js}"],
+  "server": { "baseDir": "target/classes/META-INF/resource" }
+}
