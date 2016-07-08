@@ -39,6 +39,7 @@
     <module>astatium-util</module>
     <module>astatium-camel</module>
     <module>astatium-service</module>
+    <module>astatium-web</module>
   </modules>
 
   <dependencyManagement>
