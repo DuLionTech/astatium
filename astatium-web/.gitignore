@@ -4,3 +4,4 @@
 /.project
 /node_modules/
 /typings/
+/*.log
