@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="urn:com:dulion:atatium:files" 
+    xmlns:files="urn:com:dulion:atatium:files"
+    elementFormDefault="qualified" >
+    
+    <element name="FileList" type="files:FileListType" />
+    
+    <complexType name="FileListType">
+      <sequence>
+        <element name="files" type="files:FileType" />
+      </sequence>
+    </complexType>
+    
+    <complexType name="FileType">
+      <sequence>
+        <element name="path" type="string" />
+      </sequence>
+    </complexType>
+</schema>
