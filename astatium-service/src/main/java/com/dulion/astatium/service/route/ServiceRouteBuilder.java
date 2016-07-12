@@ -16,10 +16,14 @@
 package com.dulion.astatium.service.route;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.dulion.astatium.service.model.Hello;
 
 public class ServiceRouteBuilder extends RouteBuilder {
+	
+	@Value("${atatium.service.files.path}")
+	private String path;
 	
 	@Override
 	public void configure() throws Exception {
