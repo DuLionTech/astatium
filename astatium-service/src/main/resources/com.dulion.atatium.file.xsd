@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema 
     xmlns="http://www.w3.org/2001/XMLSchema" 
-    targetNamespace="urn:com:dulion:astatium:service:model:files" 
-    xmlns:files="urn:com:dulion:astatium:service:model:files"
+    targetNamespace="urn:com:dulion:astatium:service:model:file" 
+    xmlns:file="urn:com:dulion:astatium:service:model:file"
     elementFormDefault="qualified" >
     
-    <element name="FileList" type="files:FileListType" />
+    <element name="FileList" type="file:FileListType" />
     
     <complexType name="FileListType">
       <sequence>
-        <element name="files" type="files:FileType" />
+        <element name="file" type="file:FileType" />
       </sequence>
     </complexType>
     

@@ -18,7 +18,7 @@ package com.dulion.astatium.service.route;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.dulion.astatium.service.model.Hello;
+import com.dulion.astatium.service.model.context.ContextListType;
 
 public class ServiceRouteBuilder extends RouteBuilder {
 	
@@ -27,9 +27,9 @@ public class ServiceRouteBuilder extends RouteBuilder {
 	
 	@Override
 	public void configure() throws Exception {
-		Hello hello = new Hello();
-		hello.setName("Hello World!");
-		from("bridge://contexts/all").setBody().constant(hello);
+		ContextListType list = new ContextListType();
+		
+		from("bridge://contexts/all").setBody().constant(list);
 	}
 
 }
