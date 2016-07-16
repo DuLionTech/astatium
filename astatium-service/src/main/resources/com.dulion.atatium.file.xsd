@@ -9,7 +9,7 @@
     
     <complexType name="FileListType">
       <sequence>
-        <element name="file" type="file:FileType" />
+        <element name="file" type="file:FileType" minOccurs="0" maxOccurs="unbounded" />
       </sequence>
     </complexType>
     

@@ -9,7 +9,7 @@
     
     <complexType name="ContextListType">
       <sequence>
-        <element name="contexts" type="ctx:ContextType" />
+        <element name="context" type="ctx:ContextType" minOccurs="0" maxOccurs="unbounded" />
       </sequence>
     </complexType>
     

@@ -15,10 +15,14 @@
  */
 package com.dulion.astatium.service.route;
 
+import java.util.List;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.dulion.astatium.service.model.context.ContextListType;
+import com.dulion.astatium.service.model.file.FileListType;
+import com.dulion.astatium.service.model.file.FileType;
 
 public class ServiceRouteBuilder extends RouteBuilder {
 	
@@ -27,9 +31,48 @@ public class ServiceRouteBuilder extends RouteBuilder {
 	
 	@Override
 	public void configure() throws Exception {
+		configureContext();
+		configureFile();
+	}
+
+	private void configureContext() {
 		ContextListType list = new ContextListType();
-		
 		from("bridge://contexts/all").setBody().constant(list);
 	}
 
+	private void configureFile() {
+		FileListType fileList = new FileListType();
+		List<FileType> list = fileList.getFile();
+		FileType file;
+		
+		file = new FileType();
+		file.setPath("eo2425.txt");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("eo2425ex991.txt");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("edgr-2004_10k.xmlt");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("edgr-20050228.xsd");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("edgr-20050228_cal.xml");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("edgr-20050228_lab.xml");
+		list.add(file);
+		
+		file = new FileType();
+		file.setPath("edgr-20050228_pre.xml");
+		list.add(file);
+		
+		from("bridge://files/all").setBody().constant(fileList);
+	}
 }
