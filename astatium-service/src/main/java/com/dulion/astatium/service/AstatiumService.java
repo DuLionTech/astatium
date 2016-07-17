@@ -15,15 +15,12 @@
  */
 package com.dulion.astatium.service;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.camel.spring.boot.CamelSpringBootApplicationController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -47,23 +44,23 @@ public class AstatiumService {
 		SpringApplication.run(AstatiumService.class, args)
 				.getBean(CamelSpringBootApplicationController.class).run();
 	}
-	
+
 	@Bean
 	public ServiceRouteBuilder serviceRouteBuilder() {
 		return new ServiceRouteBuilder();
 	}
 
 	@Bean
-	public List<AbstractHttpMessageConverter<?>> marshaller() {
-		return Arrays.asList(
-                new StringHttpMessageConverter(),
-                new Jaxb2RootElementHttpMessageConverter(),
-                new MappingJackson2HttpMessageConverter(
-                        Jackson2ObjectMapperBuilder.json()
-                                .annotationIntrospector(
-                                        AnnotationIntrospectorPair.create(
-                                                new JaxbAnnotationIntrospector(TypeFactory.defaultInstance()),
-                                                new JacksonAnnotationIntrospector()))
-                                .build()));
+	public HttpMessageConverters messageConverters() {
+		return new HttpMessageConverters(
+				new StringHttpMessageConverter(),
+				new Jaxb2RootElementHttpMessageConverter(),
+				new MappingJackson2HttpMessageConverter(
+						Jackson2ObjectMapperBuilder.json()
+								.annotationIntrospector(
+										AnnotationIntrospectorPair.create(
+												new JaxbAnnotationIntrospector(TypeFactory.defaultInstance()),
+												new JacksonAnnotationIntrospector()))
+								.build()));
 	}
 }
