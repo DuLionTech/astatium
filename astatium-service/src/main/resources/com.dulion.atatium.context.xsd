@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="urn:com:dulion:astatium:service:model:context" 
+    xmlns:ctx="urn:com:dulion:astatium:service:model:context"
+    elementFormDefault="qualified" >
+    
+    <element name="ContextList" type="ctx:ContextListType" />
+    
+    <complexType name="ContextListType">
+      <sequence>
+        <element name="context" type="ctx:ContextType" minOccurs="0" maxOccurs="unbounded" />
+      </sequence>
+    </complexType>
+    
+    <complexType name="ContextType">
+      <sequence>
+        <element name="URI" type="string" />
+      </sequence>
+    </complexType>
+</schema>

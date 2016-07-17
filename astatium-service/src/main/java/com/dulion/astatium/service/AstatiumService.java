@@ -41,7 +41,6 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 @Configuration
 @EnableAutoConfiguration
 @BridgePackage("com.dulion.astatium.service.web")
-//@ImportResource("classpath:META-INF/spring/astatium-camel-beans.xml")
 public class AstatiumService {
 
 	public static void main(String[] args) {

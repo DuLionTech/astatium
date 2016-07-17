@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "atatium.service.files.path",
+			"type": "java.lang.String",
+			"description": "Path to folder containing files"
+		}
+	]
+}
