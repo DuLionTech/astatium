@@ -25,7 +25,6 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.dulion.astatium.camel.bridge.BridgePackage;
 import com.dulion.astatium.service.route.ServiceRouteBuilder;
@@ -34,7 +33,6 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
-@EnableWebMvc
 @Configuration
 @EnableAutoConfiguration
 @BridgePackage("com.dulion.astatium.service.web")

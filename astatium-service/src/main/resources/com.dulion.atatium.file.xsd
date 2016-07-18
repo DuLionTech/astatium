@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema 
-    xmlns="http://www.w3.org/2001/XMLSchema" 
-    targetNamespace="urn:com:dulion:astatium:service:model:file" 
-    xmlns:file="urn:com:dulion:astatium:service:model:file"
-    elementFormDefault="qualified" >
-    
-    <element name="FileList" type="file:FileListType" />
-    
-    <complexType name="FileListType">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:com:dulion:astatium:service:model:file" xmlns:file="urn:com:dulion:astatium:service:model:file"
+  elementFormDefault="qualified">
+
+  <element name="FileRegister">
+    <complexType>
       <sequence>
-        <element name="file" type="file:FileType" minOccurs="0" maxOccurs="unbounded" />
+        <element name="FileEntry" type="file:FileEntry" minOccurs="0" maxOccurs="unbounded" />
       </sequence>
     </complexType>
-    
-    <complexType name="FileType">
-      <sequence>
-        <element name="path" type="string" />
-      </sequence>
-    </complexType>
+  </element>
+
+  <complexType name="FileEntry">
+    <sequence>
+      <element name="Path" type="string" />
+    </sequence>
+  </complexType>
 </schema>
