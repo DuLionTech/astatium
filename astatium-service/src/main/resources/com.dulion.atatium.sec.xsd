@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+  targetNamespace="urn:com:dulion:astatium:service:model:sec" 
+  xmlns:sec="urn:com:dulion:astatium:service:model:sec"
+  elementFormDefault="qualified">
+
+  <element name="FilingList">
+    <complexType>
+      <sequence>
+        <element name="Filings" type="sec:Filing" minOccurs="0" maxOccurs="unbounded" />
+      </sequence>
+    </complexType>
+  </element>
+
+  <complexType name="Filing">
+    <sequence>
+      <element name="Title" type="string" />
+      <element name="Description" type="string" />
+      <element name="PubDate" type="string" />
+    </sequence>
+  </complexType>
+</schema>

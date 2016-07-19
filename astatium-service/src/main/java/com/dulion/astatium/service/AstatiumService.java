@@ -27,6 +27,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 
 import com.dulion.astatium.camel.bridge.BridgePackage;
+import com.dulion.astatium.service.route.SecRouteBuilder;
 import com.dulion.astatium.service.route.ServiceRouteBuilder;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
@@ -46,6 +47,11 @@ public class AstatiumService {
 	@Bean
 	public ServiceRouteBuilder serviceRouteBuilder() {
 		return new ServiceRouteBuilder();
+	}
+
+	@Bean
+	public SecRouteBuilder secRouteBuilder() {
+		return new SecRouteBuilder();
 	}
 
 	@Bean

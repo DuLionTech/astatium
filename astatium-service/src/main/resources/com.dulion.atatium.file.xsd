@@ -5,7 +5,7 @@
   <element name="FileRegister">
     <complexType>
       <sequence>
-        <element name="FileEntry" type="file:FileEntry" minOccurs="0" maxOccurs="unbounded" />
+        <element name="FileEntries" type="file:FileEntry" minOccurs="0" maxOccurs="unbounded" />
       </sequence>
     </complexType>
   </element>

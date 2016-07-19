@@ -5,7 +5,7 @@
   <element name="ContextRegister">
     <complexType>
       <sequence>
-        <element name="ContextEntry" type="ctx:ContextEntry" minOccurs="0" maxOccurs="unbounded" />
+        <element name="ContextEntries" type="ctx:ContextEntry" minOccurs="0" maxOccurs="unbounded" />
       </sequence>
     </complexType>
   </element>

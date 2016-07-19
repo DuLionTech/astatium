@@ -42,7 +42,7 @@ public class ServiceRouteBuilder extends RouteBuilder {
 
 	private void configureFile() {
 		FileRegister fileList = new FileRegister();
-		List<FileEntry> list = fileList.getFileEntry();
+		List<FileEntry> list = fileList.getFileEntries();
 		FileEntry file;
 		
 		file = new FileEntry();
