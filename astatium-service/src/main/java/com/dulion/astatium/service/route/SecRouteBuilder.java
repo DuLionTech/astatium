@@ -15,20 +15,21 @@
  */
 package com.dulion.astatium.service.route;
 
+import javax.xml.stream.XMLInputFactory;
+
 import org.apache.camel.builder.RouteBuilder;
 
-import com.dulion.astatium.service.model.sec.FilingList;
-
 public class SecRouteBuilder extends RouteBuilder {
-	
+
+	private ThreadLocal<XMLInputFactory> factory = ThreadLocal.withInitial(() -> XMLInputFactory.newInstance());
+
 	@Override
 	public void configure() throws Exception {
 		configureFilings();
 	}
 
 	private void configureFilings() {
-		FilingList list = new FilingList();
-		
-		from("bridge://sec/filings").setBody().constant(list);
+		from("bridge://sec/filings")
+				.to("https4://www.sec.gov/Archives/edgar/usgaap.rss.xml");
 	}
 }
