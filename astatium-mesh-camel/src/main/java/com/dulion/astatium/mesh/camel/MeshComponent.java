@@ -13,40 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dulion.astatium.camel.bridge.component;
+package com.dulion.astatium.mesh.camel;
 
 import java.util.Map;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.UriEndpointComponent;
-import org.apache.camel.spi.Metadata;
 
-public class BridgeComponent extends UriEndpointComponent {
+public class MeshComponent extends UriEndpointComponent {
 
-	@Metadata(defaultValue = "30000")
-	private long m_timeout = 30000L;
-
-	public BridgeComponent() {
-		super(BridgeEndpoint.class);
+	public MeshComponent() {
+		super(MeshEndpoint.class);
 	}
-
-	public BridgeComponent(CamelContext context) {
-		super(context, BridgeEndpoint.class);
+	
+	public MeshComponent(CamelContext context) {
+		super(context, MeshEndpoint.class);
 	}
 
 	@Override
-	protected BridgeEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-		BridgeEndpoint endpoint = new BridgeEndpoint(uri, this);
-		endpoint.setTimeout(m_timeout);
+	protected MeshEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+		MeshEndpoint endpoint = new MeshEndpoint(uri, this);
 		setProperties(endpoint, parameters);
 		return endpoint;
 	}
-	
-	public long getTimeout() {
-		return m_timeout;
-	}
-	
-	public void setTimeout(long timeout) {
-		m_timeout = timeout;
-	}
+
 }
