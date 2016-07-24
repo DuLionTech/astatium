@@ -41,6 +41,7 @@
     <module>astatium-camel</module>
     <module>astatium-service</module>
     <module>astatium-web</module>
+    <module>astatium-mesh</module>
   </modules>
 
   <dependencyManagement>
