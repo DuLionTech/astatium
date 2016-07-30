@@ -19,7 +19,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -36,13 +35,13 @@ import com.dulion.astatium.mesh.Shredder;
 
 public class XMLShredder implements Shredder
 {
+	private final ContextManager m_manager;
+	
 	private final XMLInputFactory m_inputFactory = XMLInputFactory.newInstance();
 
-	@Resource
-	private ContextManager m_manager;
-
-	public XMLShredder()
+	public XMLShredder(ContextManager manager)
 	{
+		m_manager = manager;
 		m_inputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
 		m_inputFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
 		m_inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);

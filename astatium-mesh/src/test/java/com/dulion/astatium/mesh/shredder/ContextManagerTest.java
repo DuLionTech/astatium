@@ -36,7 +36,6 @@ import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextLoader;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextLoader;
-import com.dulion.astatium.mesh.shredder.ContextManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -46,21 +45,18 @@ public class ContextManagerTest
 	static class SpringConfiguration
 	{
 		@Bean
-		public ContextLoader contextLoader()
-		{
+		public ContextManager factory(ContextLoader loader, ContextBuilder<Context> builder) {
+			return new ContextManager(loader, builder);
+		}
+		
+		@Bean
+		public ContextLoader contextLoader() {
 			return new MemoryContextLoader();
 		}
 
 		@Bean
-		public ContextBuilder<Context> contextBuilder()
-		{
+		public ContextBuilder<Context> contextBuilder() {
 			return new MemoryContextBuilder<>();
-		}
-
-		@Bean
-		public ContextManager factory()
-		{
-			return new ContextManager();
 		}
 	}
 

@@ -15,19 +15,23 @@
  */
 package com.dulion.astatium.mesh.camel;
 
+import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.UriEndpoint;
 
+@UriEndpoint(scheme = "mesh-shred", title = "AtMeshShred", syntax = "mesh-shred://name", producerOnly = true, label = "Astatium Mesh Shredder")
 public class MeshEndpoint extends DefaultEndpoint {
 
-	public MeshEndpoint(String uri, MeshComponent meshComponent) {
+	public MeshEndpoint(String uri, Component component) {
+		super(uri, component);
 	}
 
 	@Override
 	public Producer createProducer() throws Exception {
-		throw new UnsupportedOperationException();
+		return new MeshProducer(this);
 	}
 
 	@Override

@@ -29,7 +29,6 @@ import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.collections4.ListValuedMap;
@@ -86,14 +85,14 @@ public class ContextManager
 	 */
 	private final Table<Integer, QName, Context> m_elementTable = HashBasedTable.create();
 
-	@Resource
-	private ContextLoader m_contextLoader;
+	private final ContextLoader m_contextLoader;
 
-	@Resource
-	private ContextBuilder<Context> m_contextBuilder;
+	private final ContextBuilder<Context> m_contextBuilder;
 
-	public ContextManager()
+	public ContextManager(ContextLoader contextLoader, ContextBuilder<Context> contextBuilder)
 	{
+		m_contextLoader = contextLoader;
+		m_contextBuilder = contextBuilder;
 		Range range = new RationalRange(BigInteger.valueOf(2), BigInteger.ONE);
 
 		// @formatter:off

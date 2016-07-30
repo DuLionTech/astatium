@@ -20,14 +20,29 @@ import java.util.Map;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.UriEndpointComponent;
 
+import com.dulion.astatium.mesh.Context;
+import com.dulion.astatium.mesh.meta.ContextBuilder;
+import com.dulion.astatium.mesh.meta.ContextLoader;
+import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
+import com.dulion.astatium.mesh.meta.memory.MemoryContextLoader;
+import com.dulion.astatium.mesh.shredder.ContextManager;
+
 public class MeshComponent extends UriEndpointComponent {
+
+	private final ContextManager contextManager;
 
 	public MeshComponent() {
 		super(MeshEndpoint.class);
+		contextManager = contextManager(contextLoader(), contextBuilder());
 	}
 	
 	public MeshComponent(CamelContext context) {
 		super(context, MeshEndpoint.class);
+		contextManager = contextManager(contextLoader(), contextBuilder());
+	}
+	
+	public ContextManager getContextManager() {
+		return contextManager;
 	}
 
 	@Override
@@ -37,4 +52,17 @@ public class MeshComponent extends UriEndpointComponent {
 		return endpoint;
 	}
 
+	private ContextManager contextManager(ContextLoader loader, ContextBuilder<Context> builder) {
+		return new ContextManager(loader, builder);
+	}
+	
+	private ContextLoader contextLoader() {
+		// TODO: getCamelContext().getRegistry().lookupByNameAndType(...)
+		return new MemoryContextLoader();
+	}
+
+	private ContextBuilder<Context> contextBuilder() {
+		// TODO: getCamelContext().getRegistry().lookupByNameAndType(...)
+		return new MemoryContextBuilder<>();
+	}
 }

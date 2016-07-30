@@ -15,6 +15,7 @@
  */
 package com.dulion.astatium.camel.bridge.component;
 
+import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -22,8 +23,8 @@ import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.util.ObjectHelper;
 
-import com.dulion.astatium.camel.bridge.spring.BridgeProducerHandler;
 import com.dulion.astatium.camel.bridge.spring.BridgeFactory;
+import com.dulion.astatium.camel.bridge.spring.BridgeProducerHandler;
 
 @UriEndpoint(scheme = "proxy", title = "AtProxy", syntax = "proxy://name", consumerClass = BridgeConsumer.class, label = "Astatium Proxy")
 public class BridgeEndpoint extends DefaultEndpoint {
@@ -32,12 +33,12 @@ public class BridgeEndpoint extends DefaultEndpoint {
 
 	private long m_timeout;
 
-	public BridgeEndpoint(String uri, BridgeComponent component) {
+	public BridgeEndpoint(String uri, Component component) {
 		super(uri, component);
 
 		BridgeFactory factory = getCamelContext().getRegistry().lookupByNameAndType(BridgeFactory.ID, BridgeFactory.class);
 		if (null == factory) {
-			throw new IllegalStateException("BridgeFactory has not been registered with Spring");
+			throw new IllegalStateException("BridgeFactory was not found in registry.");
 		}
 
 		m_handler = factory.lookupHandler(getEndpointKey());

@@ -43,43 +43,38 @@ import com.dulion.astatium.mesh.shredder.ContextManager;
 import com.dulion.astatium.mesh.shredder.XMLShredder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader=AnnotationConfigContextLoader.class)
-public class BundleTest
-{
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+public class BundleTest {
+	
 	@Configuration
-	public static class ContextConfiguration
-	{
+	public static class ContextConfiguration {
+		
 		@Bean
-		public ContextLoader contextLoader()
-		{
+		public Shredder shredder(ContextManager factory) {
+			return new XMLShredder(factory);
+		}
+		
+		@Bean
+		public ContextManager factory(ContextLoader loader, ContextBuilder<Context> builder) {
+			return new ContextManager(loader, builder);
+		}
+		
+		@Bean
+		public ContextLoader contextLoader() {
 			return new MemoryContextLoader();
 		}
-		
+
 		@Bean
-		public ContextBuilder<Context> contextBuilder()
-		{
+		public ContextBuilder<Context> contextBuilder() {
 			return new MemoryContextBuilder<>();
 		}
-		
-		@Bean
-		public ContextManager factory()
-		{
-			return new ContextManager();
-		}
-		
-		@Bean
-		public Shredder shredder()
-		{
-			return new XMLShredder();
-		}
 	}
-	
+
 	@Resource
 	private Shredder m_shredder;
 
 	@Test
-	public void findByName() throws Exception
-	{
+	public void findByName() throws Exception {
 		String text = "<a><b><c>123</c></b></a>";
 		DataGraph memo = m_shredder.shred(text);
 		assertTrue(memo.contains("b"));
@@ -87,8 +82,7 @@ public class BundleTest
 	}
 
 	@Test
-	public void oneLevelDescendants() throws Exception
-	{
+	public void oneLevelDescendants() throws Exception {
 		String text = "<a><b><c>123</c></b><b><c>456</c></b></a>";
 		DataGraph memo = m_shredder.shred(text);
 		List<DataNode> bees = memo.find("b");
@@ -110,11 +104,9 @@ public class BundleTest
 	}
 
 	@Test
-	public void twoLevelDescendants() throws Exception
-	{
+	public void twoLevelDescendants() throws Exception {
 		// @formatter:off
-		String text 
-				= "<a>"
+		String text = "<a>"
 				+ "  <b>"
 				+ "    <c>"
 				+ "      <d>123</d>"
@@ -137,14 +129,14 @@ public class BundleTest
 
 		DataGraph memo = m_shredder.shred(text);
 		assertEquals(12, memo.size());
-		
+
 		List<DataNode> bees = memo.find("b");
 		assertEquals(3, bees.size());
 
 		{
 			DataGraph first = memo.descendantsOf(bees.get(0));
 			assertEquals(5, first.size());
-			
+
 			List<DataNode> cees = first.find("c");
 			assertEquals(2, cees.size());
 			{
