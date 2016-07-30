@@ -58,6 +58,11 @@
         <artifactId>astatium-bridge-camel</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.dulion</groupId>
+        <artifactId>astatium-mesh</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- External Dependencies -->
       <dependency>
