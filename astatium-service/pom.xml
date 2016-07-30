@@ -23,7 +23,7 @@
     <!-- Module Dependencies -->
     <dependency>
       <groupId>com.dulion</groupId>
-      <artifactId>astatium-camel</artifactId>
+      <artifactId>astatium-bridge-camel</artifactId>
     </dependency>
 
     <!-- Web -->

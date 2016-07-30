@@ -38,7 +38,7 @@
 
   <modules>
     <module>astatium-util</module>
-    <module>astatium-camel</module>
+    <module>astatium-bridge-camel</module>
     <module>astatium-service</module>
     <module>astatium-web</module>
     <module>astatium-mesh</module>
@@ -55,7 +55,7 @@
       </dependency>
       <dependency>
         <groupId>com.dulion</groupId>
-        <artifactId>astatium-camel</artifactId>
+        <artifactId>astatium-bridge-camel</artifactId>
         <version>${project.version}</version>
       </dependency>
 

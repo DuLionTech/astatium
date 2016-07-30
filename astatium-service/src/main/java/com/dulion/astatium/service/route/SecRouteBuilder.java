@@ -15,13 +15,9 @@
  */
 package com.dulion.astatium.service.route;
 
-import javax.xml.stream.XMLInputFactory;
-
 import org.apache.camel.builder.RouteBuilder;
 
 public class SecRouteBuilder extends RouteBuilder {
-
-	private ThreadLocal<XMLInputFactory> factory = ThreadLocal.withInitial(() -> XMLInputFactory.newInstance());
 
 	@Override
 	public void configure() throws Exception {

@@ -21,7 +21,7 @@
     <artifactId>astatium</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>astatium-camel</artifactId>
+  <artifactId>astatium-bridge-camel</artifactId>
 
   <dependencies>
     <!-- Integration -->
