@@ -31,7 +31,7 @@ import com.dulion.astatium.mesh.meta.ContextType;
 import com.dulion.astatium.mesh.meta.EdgeData;
 
 
-public class MemoryContextBuilder<T> implements ContextBuilder<T>
+public class MemoryContextBuilder implements ContextBuilder
 {
 	private static final String CHILD_ELEMENT_PREFIX = "element:";
 	private static final String CHILD_ATTRIBUTE_PREFIX = "attribute:";
@@ -44,12 +44,12 @@ public class MemoryContextBuilder<T> implements ContextBuilder<T>
 	}
 
 	@Override
-	public Builder<T> builder()
+	public Builder builder()
 	{
 		return new Instance();
 	}
 
-	private class Instance implements Builder<T>
+	private class Instance implements Builder
 	{
 		private Context m_parent;
 
@@ -57,38 +57,38 @@ public class MemoryContextBuilder<T> implements ContextBuilder<T>
 
 		private QName m_name;
 
-		private BiFunction<ContextData, EdgeData, T> m_callback;
+		private BiFunction<ContextData, EdgeData, Context> m_callback;
 
 		@Override
-		public Builder<T> withParent(Context parent)
+		public Builder withParent(Context parent)
 		{
 			m_parent = parent;
 			return this;
 		}
 
 		@Override
-		public Builder<T> withType(ContextType type)
+		public Builder withType(ContextType type)
 		{
 			m_type = type;
 			return this;
 		}
 
 		@Override
-		public Builder<T> withName(QName name)
+		public Builder withName(QName name)
 		{
 			m_name = name;
 			return this;
 		}
 
 		@Override
-		public Builder<T> withCallback(BiFunction<ContextData, EdgeData, T> callback)
+		public Builder withCallback(BiFunction<ContextData, EdgeData, Context> callback)
 		{
 			m_callback = callback;
 			return this;
 		}
 
 		@Override
-		public T build()
+		public Context build()
 		{
 			ChildData child = childData();
 

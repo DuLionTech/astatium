@@ -28,6 +28,4 @@ public interface DataGraph
 	DataGraph descendantsOf(DataNode node);
 	
 	int size();
-
-	String getText();
 }

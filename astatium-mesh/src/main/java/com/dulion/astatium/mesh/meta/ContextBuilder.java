@@ -21,20 +21,20 @@ import javax.xml.namespace.QName;
 
 import com.dulion.astatium.mesh.Context;
 
-public interface ContextBuilder<T>
+public interface ContextBuilder
 {
-	Builder<T> builder();
+	Builder builder();
 
-	public interface Builder<T>
+	public interface Builder
 	{
-		Builder<T> withParent(Context parent);
+		Builder withParent(Context parent);
 
-		Builder<T> withType(ContextType type);
+		Builder withType(ContextType type);
 
-		Builder<T> withName(QName name);
+		Builder withName(QName name);
 
-		Builder<T> withCallback(BiFunction<ContextData, EdgeData, T> callback);
+		Builder withCallback(BiFunction<ContextData, EdgeData, Context> callback);
 
-		T build();
+		Context build();
 	}
 }

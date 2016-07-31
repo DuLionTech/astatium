@@ -15,6 +15,8 @@
  */
 package com.dulion.astatium.mesh.camel;
 
+import java.io.InputStream;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -25,16 +27,17 @@ import com.dulion.astatium.mesh.Shredder;
 
 public class MeshProducer extends DefaultProducer {
 
-	private Shredder m_shredder;
+	private final Shredder shredder;
 
-	public MeshProducer(Endpoint endpoint) {
+	public MeshProducer(Endpoint endpoint, Shredder shredder) {
 		super(endpoint);
+		this.shredder = shredder;
 	}
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
 		Message in = exchange.getIn();
-		String text = in.getBody(String.class);
-		DataGraph data = m_shredder.shred(text);
+		InputStream text = in.getMandatoryBody(InputStream.class);
+		in.setBody(shredder.shred(text), DataGraph.class);
 	}
 }

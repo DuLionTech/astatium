@@ -36,9 +36,7 @@ public class DefaultDataGraph implements DataGraph
 
 	private final DataNode[] m_shredsByLocation;
 
-	private String m_text;
-
-	DefaultDataGraph(ContextManager manager, DataNode[] shreds, int start, int size, String text)
+	DefaultDataGraph(ContextManager manager, DataNode[] shreds, int start, int size)
 	{
 		m_manager = manager;
 		m_memoSize = size;
@@ -47,8 +45,6 @@ public class DefaultDataGraph implements DataGraph
 		m_shredsByLocation = new DataNode[size];
 		arraycopy(shreds, start, m_shredsByLocation, 0, size);
 		sort(m_shredsByLocation, DataNode.byContext());
-
-		m_text = text;
 	}
 
 	@Override
@@ -90,19 +86,13 @@ public class DefaultDataGraph implements DataGraph
 	public DataGraph descendantsOf(DataNode shred)
 	{
 		int start = shred.getNodeId() + 1;
-		return new DefaultDataGraph(m_manager, m_shredsById, start, shred.getSize(), "");
+		return new DefaultDataGraph(m_manager, m_shredsById, start, shred.getSize());
 	}
 
 	@Override
 	public int size()
 	{
 		return m_memoSize;
-	}
-
-	@Override
-	public String getText()
-	{
-		return m_text;
 	}
 
 	private void collect(List<DataNode> list, Range range)

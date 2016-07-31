@@ -15,7 +15,8 @@
  */
 package com.dulion.astatium.mesh.shredder;
 
-import java.io.StringReader;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +34,12 @@ import com.dulion.astatium.mesh.DataGraph;
 import com.dulion.astatium.mesh.DataNode;
 import com.dulion.astatium.mesh.Shredder;
 
-public class XMLShredder implements Shredder
-{
+public class XMLShredder implements Shredder {
 	private final ContextManager m_manager;
-	
+
 	private final XMLInputFactory m_inputFactory = XMLInputFactory.newInstance();
 
-	public XMLShredder(ContextManager manager)
-	{
+	public XMLShredder(ContextManager manager) {
 		m_manager = manager;
 		m_inputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
 		m_inputFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
@@ -48,53 +47,50 @@ public class XMLShredder implements Shredder
 	}
 
 	@Override
-	public DataGraph shred(String text) throws XMLStreamException
-	{
-		try (StringReader reader = new StringReader(text))
-		{
-			XMLStreamReader stream = m_inputFactory.createXMLStreamReader(reader);
-			DataNode[] items = new Instance(stream).shred();
-			return new DefaultDataGraph(m_manager, items, 0, items.length, text);
-		}
+	public DataGraph shred(InputStream in) throws XMLStreamException {
+		return shred(m_inputFactory.createXMLStreamReader(in));
+	}
+
+	@Override
+	public DataGraph shred(Reader in) throws XMLStreamException {
+		return shred(m_inputFactory.createXMLStreamReader(in));
+	}
+	
+	private DataGraph shred(XMLStreamReader stream) throws XMLStreamException {
+		DataNode[] items = new Instance(stream).shred();
+		return new DefaultDataGraph(m_manager, items, 0, items.length);
 	}
 
 	/**
 	 * Temporary method used for debugging and runtime interaction.
 	 */
 	@Override
-	public void rendezvous(Exchange exchange)
-	{
+	public void rendezvous(Exchange exchange) {
 		m_manager.rendezvous();
 	}
 
-	private class Instance
-	{
+	private class Instance {
 		private final List<DataNode> m_shreds = new ArrayList<>();
 
 		private final XMLStreamReader m_stream;
-		
+
 		private int m_itemId = 0;
 
-		public Instance(XMLStreamReader stream)
-		{
+		public Instance(XMLStreamReader stream) {
 			m_stream = stream;
 		}
 
-		public DataNode[] shred() throws XMLStreamException
-		{
+		public DataNode[] shred() throws XMLStreamException {
 			startDocument();
-			
+
 			DataNode[] items = new DataNode[m_shreds.size()];
 			return m_shreds.toArray(items);
 		}
 
-		private void startDocument() throws XMLStreamException
-		{
-			while (m_stream.hasNext())
-			{
+		private void startDocument() throws XMLStreamException {
+			while (m_stream.hasNext()) {
 				int eventType = m_stream.next();
-				switch (eventType)
-				{
+				switch (eventType) {
 				case XMLEvent.START_ELEMENT:
 					startElement(m_manager.getRootContext(), -1);
 					break;
@@ -105,42 +101,36 @@ public class XMLShredder implements Shredder
 			}
 		}
 
-		private int startElement(Context parent, int parentId) throws XMLStreamException
-		{
+		private int startElement(Context parent, int parentId) throws XMLStreamException {
 			Context context = m_manager.getElementContext(parent, m_stream.getName());
 			DefaultDataNode tag = new DefaultDataNode(context, parentId, m_itemId++, "");
 			m_shreds.add(tag);
-			
-			int size = shredAttributes(tag); 
+
+			int size = shredAttributes(tag);
 			size += shredElements(tag);
 			tag.setSize(size);
 
 			return size + 1;
 		}
 
-		private int shredAttributes(DataNode parent)
-		{
+		private int shredAttributes(DataNode parent) {
 			int count = m_stream.getAttributeCount();
-			for (int i = 0; i < count; i++)
-			{
+			for (int i = 0; i < count; i++) {
 				QName name = m_stream.getAttributeName(i);
 				String text = m_stream.getAttributeValue(i);
-				
+
 				Context leaf = m_manager.getAttributeContext(parent.getContext(), name);
 				m_shreds.add(new DefaultDataNode(leaf, parent.getNodeId(), m_itemId++, text));
 			}
-			
+
 			return count;
 		}
 
-		private int shredElements(DefaultDataNode parent) throws XMLStreamException
-		{
+		private int shredElements(DefaultDataNode parent) throws XMLStreamException {
 			int count = 0;
-			while (m_stream.hasNext())
-			{
+			while (m_stream.hasNext()) {
 				int eventType = m_stream.next();
-				switch (eventType)
-				{
+				switch (eventType) {
 				case XMLEvent.START_ELEMENT:
 					count += startElement(parent.getContext(), parent.getNodeId());
 					break;
@@ -156,11 +146,9 @@ public class XMLShredder implements Shredder
 			return count;
 		}
 
-		private void shredCharacters(DefaultDataNode parent) throws XMLStreamException
-		{
+		private void shredCharacters(DefaultDataNode parent) throws XMLStreamException {
 			String text = m_stream.getText();
-			if (StringUtils.isNotBlank(text))
-			{
+			if (StringUtils.isNotBlank(text)) {
 				parent.setText(text);
 			}
 		}

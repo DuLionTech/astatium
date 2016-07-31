@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -31,10 +33,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import com.dulion.astatium.mesh.Context;
-import com.dulion.astatium.mesh.DataGraph;
-import com.dulion.astatium.mesh.DataNode;
-import com.dulion.astatium.mesh.Shredder;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextLoader;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
@@ -55,7 +53,7 @@ public class BundleTest {
 		}
 		
 		@Bean
-		public ContextManager factory(ContextLoader loader, ContextBuilder<Context> builder) {
+		public ContextManager factory(ContextLoader loader, ContextBuilder builder) {
 			return new ContextManager(loader, builder);
 		}
 		
@@ -65,8 +63,8 @@ public class BundleTest {
 		}
 
 		@Bean
-		public ContextBuilder<Context> contextBuilder() {
-			return new MemoryContextBuilder<>();
+		public ContextBuilder contextBuilder() {
+			return new MemoryContextBuilder();
 		}
 	}
 
@@ -75,16 +73,16 @@ public class BundleTest {
 
 	@Test
 	public void findByName() throws Exception {
-		String text = "<a><b><c>123</c></b></a>";
-		DataGraph memo = m_shredder.shred(text);
+		Reader reader = new StringReader("<a><b><c>123</c></b></a>");
+		DataGraph memo = m_shredder.shred(reader);
 		assertTrue(memo.contains("b"));
 		assertFalse(memo.contains("e"));
 	}
 
 	@Test
 	public void oneLevelDescendants() throws Exception {
-		String text = "<a><b><c>123</c></b><b><c>456</c></b></a>";
-		DataGraph memo = m_shredder.shred(text);
+		Reader reader = new StringReader("<a><b><c>123</c></b><b><c>456</c></b></a>");
+		DataGraph memo = m_shredder.shred(reader);
 		List<DataNode> bees = memo.find("b");
 		assertEquals(2, bees.size());
 
@@ -106,7 +104,8 @@ public class BundleTest {
 	@Test
 	public void twoLevelDescendants() throws Exception {
 		// @formatter:off
-		String text = "<a>"
+		Reader reader = new StringReader(
+				  "<a>"
 				+ "  <b>"
 				+ "    <c>"
 				+ "      <d>123</d>"
@@ -124,10 +123,10 @@ public class BundleTest {
 				+ "  <b>"
 				+ "    <c>xyz</c>"
 				+ "  </b>"
-				+ "</a>";
+				+ "</a>");
 		// @formatter:on
 
-		DataGraph memo = m_shredder.shred(text);
+		DataGraph memo = m_shredder.shred(reader);
 		assertEquals(12, memo.size());
 
 		List<DataNode> bees = memo.find("b");

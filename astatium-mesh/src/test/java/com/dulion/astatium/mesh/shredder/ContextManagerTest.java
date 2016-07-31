@@ -45,7 +45,7 @@ public class ContextManagerTest
 	static class SpringConfiguration
 	{
 		@Bean
-		public ContextManager factory(ContextLoader loader, ContextBuilder<Context> builder) {
+		public ContextManager factory(ContextLoader loader, ContextBuilder builder) {
 			return new ContextManager(loader, builder);
 		}
 		
@@ -55,8 +55,8 @@ public class ContextManagerTest
 		}
 
 		@Bean
-		public ContextBuilder<Context> contextBuilder() {
-			return new MemoryContextBuilder<>();
+		public ContextBuilder contextBuilder() {
+			return new MemoryContextBuilder();
 		}
 	}
 

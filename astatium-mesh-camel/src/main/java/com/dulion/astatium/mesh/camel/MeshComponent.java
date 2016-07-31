@@ -16,11 +16,11 @@
 package com.dulion.astatium.mesh.camel;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.UriEndpointComponent;
 
-import com.dulion.astatium.mesh.Context;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextLoader;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
@@ -29,40 +29,63 @@ import com.dulion.astatium.mesh.shredder.ContextManager;
 
 public class MeshComponent extends UriEndpointComponent {
 
-	private final ContextManager contextManager;
+	private final ContextManager manager;
 
 	public MeshComponent() {
 		super(MeshEndpoint.class);
-		contextManager = contextManager(contextLoader(), contextBuilder());
+		manager = contextManager();
 	}
-	
+
 	public MeshComponent(CamelContext context) {
 		super(context, MeshEndpoint.class);
-		contextManager = contextManager(contextLoader(), contextBuilder());
+		manager = contextManager();
 	}
-	
+
 	public ContextManager getContextManager() {
-		return contextManager;
+		return manager;
 	}
 
 	@Override
-	protected MeshEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-		MeshEndpoint endpoint = new MeshEndpoint(uri, this);
+	protected MeshEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters)
+			throws Exception {
+		MeshEndpoint endpoint = new MeshEndpoint(uri, this, manager);
 		setProperties(endpoint, parameters);
 		return endpoint;
 	}
 
-	private ContextManager contextManager(ContextLoader loader, ContextBuilder<Context> builder) {
-		return new ContextManager(loader, builder);
+	private ContextManager contextManager() {
+		Set<ContextManager> managers = getCamelContext().getRegistry().findByType(ContextManager.class);
+		if (managers.size() == 1) {
+			return managers.iterator().next();
+		}
+		if (managers.size() > 1) {
+			throw new IllegalStateException("Only a single instance of ContextManager allowed.");
+		}
+
+		return new ContextManager(contextLoader(), contextBuilder());
 	}
-	
+
 	private ContextLoader contextLoader() {
-		// TODO: getCamelContext().getRegistry().lookupByNameAndType(...)
+		Set<ContextLoader> loaders = getCamelContext().getRegistry().findByType(ContextLoader.class);
+		if (loaders.size() == 1) {
+			return loaders.iterator().next();
+		}
+		if (loaders.size() > 1) {
+			throw new IllegalStateException("Only one instance of ContextLoader allowed.");
+		}
+
 		return new MemoryContextLoader();
 	}
 
-	private ContextBuilder<Context> contextBuilder() {
-		// TODO: getCamelContext().getRegistry().lookupByNameAndType(...)
-		return new MemoryContextBuilder<>();
+	private ContextBuilder contextBuilder() {
+		Set<ContextBuilder> builders = getCamelContext().getRegistry().findByType(ContextBuilder.class);
+		if (builders.size() == 1) {
+			return builders.iterator().next();
+		}
+		if (builders.size() > 1) {
+			throw new IllegalStateException("Only one instance of ContextBuilder allowed.");
+		}
+
+		return new MemoryContextBuilder();
 	}
 }

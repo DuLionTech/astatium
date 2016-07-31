@@ -87,9 +87,9 @@ public class ContextManager
 
 	private final ContextLoader m_contextLoader;
 
-	private final ContextBuilder<Context> m_contextBuilder;
+	private final ContextBuilder m_contextBuilder;
 
-	public ContextManager(ContextLoader contextLoader, ContextBuilder<Context> contextBuilder)
+	public ContextManager(ContextLoader contextLoader, ContextBuilder contextBuilder)
 	{
 		m_contextLoader = contextLoader;
 		m_contextBuilder = contextBuilder;
