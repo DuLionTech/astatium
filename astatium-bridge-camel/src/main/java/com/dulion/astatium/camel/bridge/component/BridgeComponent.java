@@ -24,7 +24,7 @@ import org.apache.camel.spi.Metadata;
 public class BridgeComponent extends UriEndpointComponent {
 
 	@Metadata(defaultValue = "30000")
-	private long m_timeout = 30000L;
+	private long timeout = 30000L;
 
 	public BridgeComponent() {
 		super(BridgeEndpoint.class);
@@ -37,16 +37,16 @@ public class BridgeComponent extends UriEndpointComponent {
 	@Override
 	protected BridgeEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
 		BridgeEndpoint endpoint = new BridgeEndpoint(uri, this);
-		endpoint.setTimeout(m_timeout);
+		endpoint.setTimeout(timeout);
 		setProperties(endpoint, parameters);
 		return endpoint;
 	}
 	
 	public long getTimeout() {
-		return m_timeout;
+		return timeout;
 	}
 	
 	public void setTimeout(long timeout) {
-		m_timeout = timeout;
+		this.timeout = timeout;
 	}
 }

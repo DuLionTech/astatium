@@ -36,11 +36,11 @@ public class MemoryContextBuilder implements ContextBuilder
 	private static final String CHILD_ELEMENT_PREFIX = "element:";
 	private static final String CHILD_ATTRIBUTE_PREFIX = "attribute:";
 
-	private List<Map<String, ChildData>> m_children = new ArrayList<>();
+	private final List<Map<String, ChildData>> children = new ArrayList<>();
 	
 	public MemoryContextBuilder()
 	{
-		m_children.add(new HashMap<>());
+		children.add(new HashMap<>());
 	}
 
 	@Override
@@ -51,39 +51,39 @@ public class MemoryContextBuilder implements ContextBuilder
 
 	private class Instance implements Builder
 	{
-		private Context m_parent;
+		private Context parent;
 
-		private ContextType m_type;
+		private ContextType type;
 
-		private QName m_name;
+		private QName name;
 
-		private BiFunction<ContextData, EdgeData, Context> m_callback;
+		private BiFunction<ContextData, EdgeData, Context> callback;
 
 		@Override
 		public Builder withParent(Context parent)
 		{
-			m_parent = parent;
+			this.parent = parent;
 			return this;
 		}
 
 		@Override
 		public Builder withType(ContextType type)
 		{
-			m_type = type;
+			this.type = type;
 			return this;
 		}
 
 		@Override
 		public Builder withName(QName name)
 		{
-			m_name = name;
+			this.name = name;
 			return this;
 		}
 
 		@Override
 		public Builder withCallback(BiFunction<ContextData, EdgeData, Context> callback)
 		{
-			m_callback = callback;
+			this.callback = callback;
 			return this;
 		}
 
@@ -95,32 +95,32 @@ public class MemoryContextBuilder implements ContextBuilder
 			// @formatter:off
 			ContextData contextData = ContextData.builder()
 					.contextId(child.getContextId())
-					.namespace(m_name.getNamespaceURI())
-					.name(m_name.getLocalPart())
-					.type(m_type)
+					.namespace(name.getNamespaceURI())
+					.name(name.getLocalPart())
+					.type(type)
 					.build();
 
 			EdgeData edgeData = EdgeData.builder()
-					.parentId(m_parent.getContextId())
+					.parentId(parent.getContextId())
 					.childId(child.getContextId())
 					.index(child.getIndex())
 					.build();
 			// @formatter:on
 
-			return m_callback.apply(contextData, edgeData);
+			return callback.apply(contextData, edgeData);
 		}
 
 		private ChildData childData()
 		{
-			Map<String, ChildData> childMap = m_children.get(m_parent.getContextId());
-			String childKey = ((m_type == ContextType.ATTRIBUTE) ? CHILD_ATTRIBUTE_PREFIX : CHILD_ELEMENT_PREFIX) + m_name;
+			Map<String, ChildData> childMap = children.get(parent.getContextId());
+			String childKey = ((type == ContextType.ATTRIBUTE) ? CHILD_ATTRIBUTE_PREFIX : CHILD_ELEMENT_PREFIX) + name;
 
 			ChildData child = childMap.get(childKey);
 			if (null == child)
 			{
-				child = ChildData.builder().index(childMap.size()).contextId(m_children.size()).build();
+				child = ChildData.builder().index(childMap.size()).contextId(children.size()).build();
 				childMap.put(childKey, child);
-				m_children.add(new HashMap<>());
+				children.add(new HashMap<>());
 			}
 
 			return child;

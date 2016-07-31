@@ -61,41 +61,41 @@ public class ContextManagerTest
 	}
 
 	@Resource
-	private ContextManager m_manager;
+	private ContextManager manager;
 
-	private final List<Context> m_nodes = new ArrayList<>();
+	private final List<Context> nodes = new ArrayList<>();
 
 	@Test
 	public void childOrdering() throws Exception
 	{
 		// Create
-		m_nodes.add(m_manager.getRootContext());
+		nodes.add(manager.getRootContext());
 		populate("/", 4, 3);
-		m_nodes.remove(0); // Remove base element.
+		nodes.remove(0); // Remove base element.
 
 		System.out.println("Natural Order");
-		m_nodes.stream().forEach(node -> System.out.printf("%-19s %s\n", node.getRange(), node.getName()));
+		nodes.stream().forEach(node -> System.out.printf("%-19s %s\n", node.getRange(), node.getName()));
 
 		// Sort
-		List<Context> copy = new ArrayList<>(m_nodes);
+		List<Context> copy = new ArrayList<>(nodes);
 		copy.sort(Context.byContext());
 
 		System.out.println("Sorted by Locator");
 		copy.stream().forEach(node -> System.out.printf("%-19s %s\n", node.getRange(), node.getName()));
 
-		assertEquals(m_nodes, copy);
+		assertEquals(nodes, copy);
 	}
 
 	private void populate(CharSequence path, int width, int depth)
 	{
 		if (depth < 0) return;
 
-		Context parent = m_nodes.get(m_nodes.size() - 1);
+		Context parent = nodes.get(nodes.size() - 1);
 		for (int j = 0; j < width; j++)
 		{
 			StringBuilder text = new StringBuilder(path);
 			text.append(j);
-			m_nodes.add(m_manager.getElementContext(parent, new QName(text.toString())));
+			nodes.add(manager.getElementContext(parent, new QName(text.toString())));
 			text.append('/');
 			populate(text, width, depth - 1);
 		}

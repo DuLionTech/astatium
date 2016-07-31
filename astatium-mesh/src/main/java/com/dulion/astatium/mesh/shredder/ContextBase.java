@@ -27,23 +27,23 @@ public class ContextBase implements Context
 {
 	private static final Range PARENT_LOCATOR = new RationalRange(BigInteger.ONE, BigInteger.ZERO);
 	
-	private final Range m_range;
+	private final Range range;
 	
-	private final ContextData m_data;
+	private final ContextData data;
 	
-	private final QName m_name;
+	private final QName name;
 	
 	public ContextBase(ContextData data, Range range)
 	{
-		m_range = range;
-		m_data = data;
-		m_name = new QName(data.getNamespace(), data.getName());
+		this.range = range;
+		this.data = data;
+		this.name = new QName(data.getNamespace(), data.getName());
 	}
 	
 	@Override
 	public int getContextId()
 	{
-		return m_data.getContextId();
+		return data.getContextId();
 	}
 
 	@Override
@@ -60,13 +60,13 @@ public class ContextBase implements Context
 	@Override
 	public final Range getRange()
 	{
-		return m_range;
+		return range;
 	}
 	
 	@Override
 	public final QName getName()
 	{
-		return m_name;
+		return name;
 	}
 	
 	@Override

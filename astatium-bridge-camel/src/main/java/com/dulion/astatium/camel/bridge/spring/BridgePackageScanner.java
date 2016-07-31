@@ -37,25 +37,25 @@ public class BridgePackageScanner {
 
 	private static final String CONSUMER_METHOD = "create";
 	
-	private final XingCamelComponentProvider m_provider = new XingCamelComponentProvider();
+	private final XingCamelComponentProvider provider = new XingCamelComponentProvider();
 	
-	private final BeanNameGenerator m_generator = new AnnotationBeanNameGenerator();
+	private final BeanNameGenerator generator = new AnnotationBeanNameGenerator();
 	
-	private final BeanDefinitionRegistry m_registry;
+	private final BeanDefinitionRegistry registry;
 
-	private final ClassLoader m_classLoader;
+	private final ClassLoader classLoader;
 
-	private final String m_factoryName;
+	private final String factoryName;
 	
 	public BridgePackageScanner(BeanDefinitionRegistry registry, ClassLoader classLoader) {
-		m_registry = registry;
-		m_classLoader = classLoader;
+		this.registry = registry;
+		this.classLoader = classLoader;
 
 		try {
-			MetadataReader reader = m_provider.getMetadataReaderFactory().getMetadataReader(CONSUMER_FACTORY);
+			MetadataReader reader = provider.getMetadataReaderFactory().getMetadataReader(CONSUMER_FACTORY);
 			ScannedGenericBeanDefinition definition = new ScannedGenericBeanDefinition(reader);
-			m_factoryName = m_generator.generateBeanName(definition, m_registry);
-			m_registry.registerBeanDefinition(m_factoryName, definition);
+			factoryName = generator.generateBeanName(definition, registry);
+			registry.registerBeanDefinition(factoryName, definition);
 		} catch (IOException ex) {
 			throw new GenericBeansException(String.format("Unable to register factory class: %s", CONSUMER_FACTORY), ex);
 		}
@@ -68,15 +68,15 @@ public class BridgePackageScanner {
 	}
 
 	private void registerProxyBeans(String basePackage) throws LinkageError {
-		for (AnnotatedBeanDefinition definition : m_provider.findComponents(basePackage)) {
+		for (AnnotatedBeanDefinition definition : provider.findComponents(basePackage)) {
 			String beanType = definition.getBeanClassName();
-			String beanName = m_generator.generateBeanName(definition, m_registry);
+			String beanName = generator.generateBeanName(definition, registry);
 			try {
 				definition.setBeanClassName(null);
-				definition.setFactoryBeanName(m_factoryName);
+				definition.setFactoryBeanName(factoryName);
 				definition.setFactoryMethodName(CONSUMER_METHOD);
-				definition.getConstructorArgumentValues().addGenericArgumentValue(ClassUtils.forName(beanType, m_classLoader));
-				m_registry.registerBeanDefinition(beanName, definition);
+				definition.getConstructorArgumentValues().addGenericArgumentValue(ClassUtils.forName(beanType, classLoader));
+				registry.registerBeanDefinition(beanName, definition);
 			} catch (ClassNotFoundException ex) {
 				throw new GenericBeansException(String.format("Unable to register bean: %s", beanType), ex);
 			}

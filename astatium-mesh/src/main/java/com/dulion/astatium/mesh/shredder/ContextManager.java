@@ -59,40 +59,40 @@ public class ContextManager
 	/**
 	 * The root of all contexts.
 	 */
-	private final ContextBase m_root;
+	private final ContextBase root;
 
 	/**
 	 * Prefix trie map containing full and partial names mapped to lists of fully qualified names.
 	 */
-	private final Trie<String, List<QName>> m_nameTrie = new PatriciaTrie<>();
+	private final Trie<String, List<QName>> nameTrie = new PatriciaTrie<>();
 
 	/**
 	 * Map of fully qualified names to lists of contexts.
 	 */
-	private final ListValuedMap<QName, Context> m_contextMap = MultiMapUtils.newListValuedHashMap();
+	private final ListValuedMap<QName, Context> contextMap = MultiMapUtils.newListValuedHashMap();
 
 	/**
 	 * All attribute contexts. This enables us to quickly find attribute children of a parent context by name.
 	 * 
 	 * Elements and Attributes can have the same name with different structures. We don't want to mix these.
 	 */
-	private final Table<Integer, QName, Context> m_attributeTable = HashBasedTable.create();
+	private final Table<Integer, QName, Context> attributeTable = HashBasedTable.create();
 
 	/**
 	 * All element contexts. This enables us to quickly find element children of a parent context by name.
 	 * 
 	 * Elements and Attributes can have the same name with different structures. We don't want to mix these.
 	 */
-	private final Table<Integer, QName, Context> m_elementTable = HashBasedTable.create();
+	private final Table<Integer, QName, Context> elementTable = HashBasedTable.create();
 
-	private final ContextLoader m_contextLoader;
+	private final ContextLoader contextLoader;
 
-	private final ContextBuilder m_contextBuilder;
+	private final ContextBuilder contextBuilder;
 
 	public ContextManager(ContextLoader contextLoader, ContextBuilder contextBuilder)
 	{
-		m_contextLoader = contextLoader;
-		m_contextBuilder = contextBuilder;
+		this.contextLoader = contextLoader;
+		this.contextBuilder = contextBuilder;
 		Range range = new RationalRange(BigInteger.valueOf(2), BigInteger.ONE);
 
 		// @formatter:off
@@ -104,19 +104,19 @@ public class ContextManager
 				.build();
 		// @formatter:on
 
-		m_root = new ContextBase(context, range);
+		root = new ContextBase(context, range);
 	}
 
 	@PostConstruct
 	public void initialize()
 	{
 		Map<Integer, Context> metaMap = new HashMap<>();
-		metaMap.put(m_root.getContextId(), m_root);
-		m_contextLoader.loader().withCallback((context, edge) -> loadChild(metaMap, context, edge)).load();
+		metaMap.put(root.getContextId(), root);
+		contextLoader.loader().withCallback((context, edge) -> loadChild(metaMap, context, edge)).load();
 
-		LOG.info(String.format("Number of names: %,d", m_contextMap.keySet().size()));
-		LOG.info(String.format("Number of tries: %,d", m_nameTrie.size()));
-		LOG.info(String.format("Number of paths: %,d", m_contextMap.size()));
+		LOG.info(String.format("Number of names: %,d", contextMap.keySet().size()));
+		LOG.info(String.format("Number of tries: %,d", nameTrie.size()));
+		LOG.info(String.format("Number of paths: %,d", contextMap.size()));
 	}
 
 	List<Context> findContexts(Context context, String name)
@@ -129,22 +129,22 @@ public class ContextManager
 
 	List<Context> findContexts(String name)
 	{
-		return unmodifiableList(m_contextMap.get(QName.valueOf(name)));
+		return unmodifiableList(contextMap.get(QName.valueOf(name)));
 	}
 
 	Context getRootContext()
 	{
-		return m_root;
+		return root;
 	}
 
 	Context getElementContext(Context parent, QName name)
 	{
-		return getChild(m_elementTable, ContextType.ELEMENT, parent, name);
+		return getChild(elementTable, ContextType.ELEMENT, parent, name);
 	}
 
 	Context getAttributeContext(Context parent, QName name)
 	{
-		return getChild(m_attributeTable, ContextType.ATTRIBUTE, parent, name);
+		return getChild(attributeTable, ContextType.ATTRIBUTE, parent, name);
 	}
 
 	private Context getChild(Table<Integer, QName, Context> table, ContextType type, Context parent, QName name)
@@ -154,7 +154,7 @@ public class ContextManager
 			Context child = table.get(parent.getContextId(), name);
 			if (null == child)
 			{
-				child = m_contextBuilder.builder()
+				child = contextBuilder.builder()
 					.withParent(parent)
 					.withType(type)
 					.withName(name)
@@ -184,10 +184,10 @@ public class ContextManager
 		switch (context.getType())
 		{
 		case ATTRIBUTE:
-			m_attributeTable.put(parent.getContextId(), child.getName(), child);
+			attributeTable.put(parent.getContextId(), child.getName(), child);
 			break;
 		case ELEMENT:
-			m_elementTable.put(parent.getContextId(), child.getName(), child);
+			elementTable.put(parent.getContextId(), child.getName(), child);
 			break;
 		default:
 			LOG.warn("Unexpected metadata type: {}", context.getType());
@@ -207,7 +207,7 @@ public class ContextManager
 
 	private void updateNameTable(ContextChild child)
 	{
-		List<Context> list = m_contextMap.get(child.getName());
+		List<Context> list = contextMap.get(child.getName());
 		if (list.isEmpty())
 		{
 			// First time we've encountered this name, so add name to trie.
@@ -236,11 +236,11 @@ public class ContextManager
 	private void putNameTrie(String name, QName value)
 	{
 		String key = name.toLowerCase();
-		List<QName> list = m_nameTrie.get(key);
+		List<QName> list = nameTrie.get(key);
 		if (null == list)
 		{
 			list = new ArrayList<>();
-			m_nameTrie.put(key, list);
+			nameTrie.put(key, list);
 			list.add(value);
 		}
 		else
@@ -272,7 +272,7 @@ public class ContextManager
 
 	private void logNamesMatching(String name)
 	{
-		List<QName> keyList = m_nameTrie.get(name.toLowerCase());
+		List<QName> keyList = nameTrie.get(name.toLowerCase());
 		if (null == keyList)
 		{
 			LOG.info("Name not found: {}", name);
@@ -281,7 +281,7 @@ public class ContextManager
 		{
 			keyList.stream().forEach(key -> {
 				LOG.info("Name: {}", key);
-				for (Context context : m_contextMap.get(key))
+				for (Context context : contextMap.get(key))
 				{
 					LOG.info("    Path: {}", buildPath(context));
 				}
@@ -292,7 +292,7 @@ public class ContextManager
 	@SuppressWarnings("unused")
 	private void logNamesLike(String name)
 	{
-		SortedMap<String, List<QName>> prefixMap = m_nameTrie.prefixMap(name.toLowerCase());
+		SortedMap<String, List<QName>> prefixMap = nameTrie.prefixMap(name.toLowerCase());
 		prefixMap.values().stream().flatMap(nameList -> nameList.stream()).sorted((first, second) -> {
 			int result = first.getLocalPart().compareTo(second.getLocalPart());
 			return 0 != result ? result : first.getNamespaceURI().compareTo(second.getNamespaceURI());
@@ -309,8 +309,8 @@ public class ContextManager
 	{
 		String space = Strings.repeat("  ", 40);
 
-		Context[] array = new Context[m_contextMap.size()];
-		m_contextMap.values().toArray(array);
+		Context[] array = new Context[contextMap.size()];
+		contextMap.values().toArray(array);
 		sort(array, Context.byContext());
 
 		int maxSize = 0;

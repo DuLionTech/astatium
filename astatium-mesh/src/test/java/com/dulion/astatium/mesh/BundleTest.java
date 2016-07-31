@@ -69,12 +69,12 @@ public class BundleTest {
 	}
 
 	@Resource
-	private Shredder m_shredder;
+	private Shredder shredder;
 
 	@Test
 	public void findByName() throws Exception {
 		Reader reader = new StringReader("<a><b><c>123</c></b></a>");
-		DataGraph memo = m_shredder.shred(reader);
+		DataGraph memo = shredder.shred(reader);
 		assertTrue(memo.contains("b"));
 		assertFalse(memo.contains("e"));
 	}
@@ -82,7 +82,7 @@ public class BundleTest {
 	@Test
 	public void oneLevelDescendants() throws Exception {
 		Reader reader = new StringReader("<a><b><c>123</c></b><b><c>456</c></b></a>");
-		DataGraph memo = m_shredder.shred(reader);
+		DataGraph memo = shredder.shred(reader);
 		List<DataNode> bees = memo.find("b");
 		assertEquals(2, bees.size());
 
@@ -126,7 +126,7 @@ public class BundleTest {
 				+ "</a>");
 		// @formatter:on
 
-		DataGraph memo = m_shredder.shred(reader);
+		DataGraph memo = shredder.shred(reader);
 		assertEquals(12, memo.size());
 
 		List<DataNode> bees = memo.find("b");

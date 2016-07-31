@@ -41,25 +41,25 @@ public class BridgeFactory implements BeanClassLoaderAware {
 
 	private static final String DUPLICATE_MESSAGE = "Duplicate endpoint name or overloaded method name: ";
 
-	private final Map<String, BridgeProducerHandler> m_reverse = new HashMap<>();
+	private final Map<String, BridgeProducerHandler> reverse = new HashMap<>();
 
-	private final Map<Method, BridgeProducerHandler> m_forward = new HashMap<>();
+	private final Map<Method, BridgeProducerHandler> forward = new HashMap<>();
 
-	private ClassLoader m_classLoader;
+	private ClassLoader classLoader;
 	
 	public BridgeFactory() {
 	}
 
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
-		m_classLoader = classLoader;
+		this.classLoader = classLoader;
 	}
 
 	public BridgeProducerHandler lookupHandler(String endpointKey) {
-		BridgeProducerHandler handler = m_reverse.get(endpointKey);
+		BridgeProducerHandler handler = reverse.get(endpointKey);
 		if (null == handler) {
 			handler = new BridgeProducerHandler();
-			m_reverse.put(endpointKey, handler);
+			reverse.put(endpointKey, handler);
 		}
 		
 		return handler;
@@ -74,12 +74,12 @@ public class BridgeFactory implements BeanClassLoaderAware {
 			BridgeProducerHandler handler = lookupHandler("bridge://" + controllerName + '/' + endpointName);
 			handler.setMethod(method);
 			
-			if (null != m_forward.put(method, handler)) {
+			if (null != forward.put(method, handler)) {
 				throw new AnnotationConfigurationException(DUPLICATE_MESSAGE + endpointName);
 			}
 		}
 
-		return type.cast(Proxy.newProxyInstance(m_classLoader, new Class<?>[] { type }, new Handler()));
+		return type.cast(Proxy.newProxyInstance(classLoader, new Class<?>[] { type }, new Handler()));
 	}
 
 	private static Method getObjectMethod(String name, Class<?>... types) {
@@ -93,7 +93,7 @@ public class BridgeFactory implements BeanClassLoaderAware {
 	private class Handler implements InvocationHandler {
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			BridgeProducerHandler handler = m_forward.get(method);
+			BridgeProducerHandler handler = forward.get(method);
 			if (null != handler) {
 				return handler.invoke(args);
 			}

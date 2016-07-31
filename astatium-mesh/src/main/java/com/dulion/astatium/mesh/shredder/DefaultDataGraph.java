@@ -28,29 +28,29 @@ import com.dulion.astatium.mesh.Range;
 
 public class DefaultDataGraph implements DataGraph
 {
-	private final ContextManager m_manager;
+	private final ContextManager manager;
 	
-	private final int m_memoSize;
+	private final int size;
 	
-	private final DataNode[] m_shredsById;
+	private final DataNode[] nodesById;
 
-	private final DataNode[] m_shredsByLocation;
+	private final DataNode[] nodesByLocation;
 
-	DefaultDataGraph(ContextManager manager, DataNode[] shreds, int start, int size)
+	DefaultDataGraph(ContextManager manager, DataNode[] nodes, int start, int size)
 	{
-		m_manager = manager;
-		m_memoSize = size;
-		m_shredsById = shreds;
+		this.manager = manager;
+		this.size = size;
+		this.nodesById = nodes;
 		
-		m_shredsByLocation = new DataNode[size];
-		arraycopy(shreds, start, m_shredsByLocation, 0, size);
-		sort(m_shredsByLocation, DataNode.byContext());
+		nodesByLocation = new DataNode[size];
+		arraycopy(nodes, start, nodesByLocation, 0, size);
+		sort(nodesByLocation, DataNode.byContext());
 	}
 
 	@Override
 	public boolean contains(String name)
 	{
-		for (Context context : m_manager.findContexts(name))
+		for (Context context : manager.findContexts(name))
 		{
 			if (0 <= findTag(context.getRange())) return true;
 		}
@@ -62,7 +62,7 @@ public class DefaultDataGraph implements DataGraph
 	public List<DataNode> find(String name)
 	{
 		List<DataNode> list = new ArrayList<DataNode>();
-		for (Context match : m_manager.findContexts(name))
+		for (Context match : manager.findContexts(name))
 		{
 			collect(list, match.getRange());
 		}
@@ -74,7 +74,7 @@ public class DefaultDataGraph implements DataGraph
 	public List<DataNode> find(Context context, String name)
 	{
 		List<DataNode> list = new ArrayList<DataNode>();
-		for (Context match : m_manager.findContexts(context, name))
+		for (Context match : manager.findContexts(context, name))
 		{
 			collect(list, match.getRange());
 		}
@@ -86,13 +86,13 @@ public class DefaultDataGraph implements DataGraph
 	public DataGraph descendantsOf(DataNode shred)
 	{
 		int start = shred.getNodeId() + 1;
-		return new DefaultDataGraph(m_manager, m_shredsById, start, shred.getSize());
+		return new DefaultDataGraph(manager, nodesById, start, shred.getSize());
 	}
 
 	@Override
 	public int size()
 	{
-		return m_memoSize;
+		return size;
 	}
 
 	private void collect(List<DataNode> list, Range range)
@@ -101,15 +101,15 @@ public class DefaultDataGraph implements DataGraph
 		if (0 <= index)
 		{
 			// Tag may not be unique, so findTag may not be pointing to the first occurrence.
-			while (0 < index && 0 == m_shredsByLocation[index - 1].getRange().compareTo(range))
+			while (0 < index && 0 == nodesByLocation[index - 1].getRange().compareTo(range))
 			{
 				index--;
 			}
 
-			final int size = m_shredsByLocation.length;
-			while (size > index && 0 == m_shredsByLocation[index].getRange().compareTo(range))
+			final int size = nodesByLocation.length;
+			while (size > index && 0 == nodesByLocation[index].getRange().compareTo(range))
 			{
-				list.add(m_shredsByLocation[index++]);
+				list.add(nodesByLocation[index++]);
 			}
 		}
 	}
@@ -117,11 +117,11 @@ public class DefaultDataGraph implements DataGraph
 	private int findTag(Range range)
 	{
 		int low = 0;
-		int high = m_shredsByLocation.length - 1;
+		int high = nodesByLocation.length - 1;
 		while (low <= high)
 		{
 			int mid = (low + high) >>> 1;
-			int compare = m_shredsByLocation[mid].getRange().compareTo(range);
+			int compare = nodesByLocation[mid].getRange().compareTo(range);
 			if (compare < 0)
 			{
 				low = mid + 1;

@@ -28,41 +28,41 @@ public class BridgeProducerHandler {
 	
 	private static final String ONLY_ONE = "Cannot add a 2nd consumer to the same endpoint. Endpoint %s only allows one consumer.";
 	
-	private Method m_method;
+	private Method method;
 	
-	private volatile BridgeConsumer m_consumer;
+	private volatile BridgeConsumer consumer;
 
 	public BridgeProducerHandler() {
 	}
 	
 	public Method getMethod() {
-		return m_method;
+		return method;
 	}
 	
 	public void setMethod(Method method) {
-		m_method = method;
+		this.method = method;
 	}
 
 	public BridgeConsumer getConsumer() {
-		return m_consumer;
+		return consumer;
 	}
 
 	public void setConsumer(BridgeConsumer consumer) {
-		if (null != consumer && null != m_consumer) {
+		if (null != consumer && null != this.consumer) {
 			String message = String.format(ONLY_ONE, this);
 			throw new IllegalArgumentException(message);
 		}
 		
-		m_consumer = consumer;
+		this.consumer = consumer;
 	}
 
 	public Object invoke(Object[] args) throws Exception {
-		Exchange exchange = new DefaultExchange(m_consumer.getEndpoint(), ExchangePattern.InOut);
-		exchange.getIn().setBody(new BeanInvocation(m_method, args));
-		m_consumer.createUoW(exchange);
-        m_consumer.getProcessor().process(exchange);
+		Exchange exchange = new DefaultExchange(consumer.getEndpoint(), ExchangePattern.InOut);
+		exchange.getIn().setBody(new BeanInvocation(method, args));
+		consumer.createUoW(exchange);
+        consumer.getProcessor().process(exchange);
         
-        Class<?> type = m_method.getReturnType();
+        Class<?> type = method.getReturnType();
         if (Void.TYPE == type) {
         	return null;
         }

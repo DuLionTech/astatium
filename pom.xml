@@ -33,7 +33,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <joda.beans.indent>tab</joda.beans.indent>
-    <joda.beans.prefix>m_</joda.beans.prefix>
   </properties>
 
   <modules>

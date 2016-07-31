@@ -21,90 +21,90 @@ import com.dulion.astatium.mesh.Range;
 
 public class DefaultDataNode implements DataNode
 {
-	private final Context m_context;
+	private final Context context;
 	
-	private final int m_parentId;
+	private final int parentId;
 	
-	private final int m_itemId;
+	private final int itemId;
 	
-	private int m_size = 0;
+	private int size = 0;
 	
-	private String m_text;
+	private String text;
 
 	public DefaultDataNode(Context context, int parentId, int itemId, String text)
 	{
-		m_parentId = parentId;
-		m_itemId = itemId;
-		m_context = context;
-		m_text = text;
+		this.parentId = parentId;
+		this.itemId = itemId;
+		this.context = context;
+		this.text = text;
 	}
 	
 	@Override
 	public Context getContext()
 	{
-		return m_context;
+		return context;
 	}
 	
 	@Override
 	public int getNodeId()
 	{
-		return m_itemId;
+		return itemId;
 	}
 	
 	@Override
 	public int getParentId()
 	{
-		return m_parentId;
+		return parentId;
 	}
 	
 	@Override
 	public int getSize()
 	{
-		return m_size;
+		return size;
 	}
 
 	@Override
 	public String getText()
 	{
-		return m_text;
+		return text;
 	}
 
 	@Override
 	public Range getRange()
 	{
-		return m_context.getRange();
+		return context.getRange();
 	}
 	
 	@Override
 	public Range getParentRange()
 	{
-		return m_context.getParent().getRange();
+		return context.getParent().getRange();
 	}
 
 	@Override
 	public boolean isSibling(DataNode other)
 	{
-		return other.getParentId() == m_parentId;
+		return other.getParentId() == parentId;
 	}
 	
 	public void setSize(int size)
 	{
-		m_size = size;
+		this.size = size;
 	}
 
 	public void setText(String text)
 	{
-		m_text = text;
+		this.text = text;
 	}
 
 	@Override
 	public String toString()
 	{
-		if (m_text.length() > 0)
+		if (text.length() > 0)
 		{
-			return m_context.getName() + ": \"" + m_text + '"';
+			return context.getName() + ": \"" + text + '"';
 		}
 		
-		return m_context.getName().toString();
+		return context.getName().toString();
 	}
 }

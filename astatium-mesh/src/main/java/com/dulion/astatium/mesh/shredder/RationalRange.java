@@ -22,52 +22,52 @@ import com.dulion.astatium.mesh.Range;
 
 public final class RationalRange implements Range
 {
-	private final Location m_lower;
+	private final Location lower;
 
-	private final Location m_upper;
+	private final Location upper;
 
 	public RationalRange(Location lower, Location upper)
 	{
-		m_lower = lower;
-		m_upper = upper;
+		this.lower = lower;
+		this.upper = upper;
 	}
 
 	public RationalRange(BigInteger numerator, BigInteger denominator)
 	{
-		m_lower = m_upper = new RationalLocation(numerator, denominator);
+		lower = upper = new RationalLocation(numerator, denominator);
 	}
 
 	@Override
 	public Location getUpper()
 	{
-		return m_upper;
+		return upper;
 	}
 
 	@Override
 	public Location getLower()
 	{
-		return m_lower;
+		return lower;
 	}
 
 	@Override
 	public boolean isDescendant(Range other)
 	{
-		int lower = m_lower.compareTo(other.getLower());
-		int upper = m_upper.compareTo(other.getUpper());
-		return (0 > lower && 0 < upper);
+		int lo = lower.compareTo(other.getLower());
+		int up = upper.compareTo(other.getUpper());
+		return (lo < 0 && up > 0);
 	}
 
 	@Override
 	public int compareTo(Range other)
 	{
 		if (this == other) return 0;
-		return m_lower.compareTo(other.getLower());
+		return lower.compareTo(other.getLower());
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return m_lower.hashCode();
+		return lower.hashCode();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public final class RationalRange implements Range
 		if (getClass() != that.getClass()) return false;
 
 		final Range other = (Range) that;
-		if (m_lower != other.getLower()) return false;
+		if (lower != other.getLower()) return false;
 
 		return true;
 	}
@@ -86,7 +86,7 @@ public final class RationalRange implements Range
 	@Override
 	public String toString()
 	{
-		return m_lower + ":" + m_upper;
+		return lower + ":" + upper;
 	}
 
 	/**
@@ -98,8 +98,8 @@ public final class RationalRange implements Range
 	 */
 	Range child(Range parent, int index)
 	{
-		Location lower = ((RationalLocation) m_upper).derive(parent.getUpper(), index);
-		Location upper = ((RationalLocation) lower).add(m_upper);
-		return new RationalRange(lower, upper);
+		Location lo = ((RationalLocation) upper).derive(parent.getUpper(), index);
+		Location up = ((RationalLocation) lo).add(upper);
+		return new RationalRange(lo, up);
 	}
 }

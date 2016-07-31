@@ -29,9 +29,9 @@ import com.dulion.astatium.camel.bridge.spring.BridgeProducerHandler;
 @UriEndpoint(scheme = "proxy", title = "AtProxy", syntax = "proxy://name", consumerClass = BridgeConsumer.class, label = "Astatium Proxy")
 public class BridgeEndpoint extends DefaultEndpoint {
 
-	private final BridgeProducerHandler m_handler;
+	private final BridgeProducerHandler handler;
 
-	private long m_timeout;
+	private long timeout;
 
 	public BridgeEndpoint(String uri, Component component) {
 		super(uri, component);
@@ -41,8 +41,8 @@ public class BridgeEndpoint extends DefaultEndpoint {
 			throw new IllegalStateException("BridgeFactory was not found in registry.");
 		}
 
-		m_handler = factory.lookupHandler(getEndpointKey());
-		if (null == m_handler) {
+		handler = factory.lookupHandler(getEndpointKey());
+		if (null == handler) {
 			throw new IllegalArgumentException("No ProxyMethodHandler found matching: " + getEndpointKey());
 		}
 	}
@@ -65,19 +65,19 @@ public class BridgeEndpoint extends DefaultEndpoint {
 	}
 
 	public BridgeConsumer getConsumer() {
-		return m_handler.getConsumer();
+		return handler.getConsumer();
 	}
 
 	public void setConsumer(BridgeConsumer consumer) {
-		m_handler.setConsumer(consumer);
+		handler.setConsumer(consumer);
 	}
 
 	public long getTimeout() {
-		return m_timeout;
+		return timeout;
 	}
 
 	public void setTimeout(long timeout) {
-		m_timeout = timeout;
+		this.timeout = timeout;
 	}
 
 	protected String getKey() {

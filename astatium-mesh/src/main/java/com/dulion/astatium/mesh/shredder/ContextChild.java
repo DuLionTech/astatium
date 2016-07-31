@@ -21,29 +21,29 @@ import com.dulion.astatium.mesh.meta.ContextData;
 
 public class ContextChild extends ContextBase
 {
-	private final Context m_parent;
+	private final Context parent;
 
 	public ContextChild(Context parent, ContextData data, Range range)
 	{
 		super(data, range);
-		m_parent = parent;
+		this.parent = parent;
 	}
 
 	@Override
 	public Context getParent()
 	{
-		return m_parent;
+		return parent;
 	}
 
 	@Override
 	public Range getParentLocator()
 	{
-		return m_parent.getRange();
+		return parent.getRange();
 	}
 
 	@Override
 	public int getDepth()
 	{
-		return m_parent.getDepth() + 1;
+		return parent.getDepth() + 1;
 	}
 }

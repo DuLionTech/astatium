@@ -39,7 +39,7 @@ public class BridgePostProcessor implements BeanDefinitionRegistryPostProcessor,
 	
 	private static final Logger LOG = LoggerFactory.getLogger(BridgePostProcessor.class);
 
-	private ClassLoader m_classLoader;
+	private ClassLoader classLoader;
 	
 	public BridgePostProcessor() {
 		LOG.info("Camel Proxy post-processor created");
@@ -47,7 +47,7 @@ public class BridgePostProcessor implements BeanDefinitionRegistryPostProcessor,
 
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
-		m_classLoader = classLoader;
+		this.classLoader = classLoader;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class BridgePostProcessor implements BeanDefinitionRegistryPostProcessor,
 		Set<String> basePackages = findBasePackages(registry);
 		if (basePackages.size() > 0) {
 			LOG.info("Registering XingCamel annotated interfaces in {}", basePackages);
-			new BridgePackageScanner(registry, m_classLoader).scan(basePackages);
+			new BridgePackageScanner(registry, classLoader).scan(basePackages);
 		}
 	}
 

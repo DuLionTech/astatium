@@ -25,40 +25,40 @@ public final class RationalLocation implements Location
 {
 	private static final Map<BigInteger, BigInteger> FLYWEIGHT = new HashMap<>();
 
-	private final BigInteger m_numerator;
+	private final BigInteger numerator;
 
-	private final BigInteger m_denominator;
+	private final BigInteger denominator;
 
-	private transient int m_hashCode = 0;
+	private transient int hashCode = 0;
 
 	public RationalLocation(BigInteger numerator, BigInteger denomintor)
 	{
-		m_numerator = flyweight(numerator);
-		m_denominator = flyweight(denomintor);
+		this.numerator = flyweight(numerator);
+		this.denominator = flyweight(denomintor);
 	}
 
 	public BigInteger getNumerator()
 	{
-		return m_numerator;
+		return numerator;
 	}
 
 	public BigInteger getDenominator()
 	{
-		return m_denominator;
+		return denominator;
 	}
 
 	public Location derive(Location parent, int index)
 	{
-		BigInteger numerator = product(m_numerator, ((RationalLocation) parent).getNumerator(), index);
-		BigInteger denominator = product(m_denominator, ((RationalLocation) parent).getDenominator(), index);
-		return new RationalLocation(numerator, denominator);
+		BigInteger num = product(numerator, ((RationalLocation) parent).getNumerator(), index);
+		BigInteger den = product(denominator, ((RationalLocation) parent).getDenominator(), index);
+		return new RationalLocation(num, den);
 	}
 
 	public Location add(Location parent)
 	{
-		BigInteger numerator = m_numerator.add(((RationalLocation) parent).getNumerator());
-		BigInteger denominator = m_denominator.add(((RationalLocation) parent).getDenominator());
-		return new RationalLocation(numerator, denominator);
+		BigInteger num = numerator.add(((RationalLocation) parent).getNumerator());
+		BigInteger den = denominator.add(((RationalLocation) parent).getDenominator());
+		return new RationalLocation(num, den);
 	}
 
 	@Override
@@ -68,20 +68,20 @@ public final class RationalLocation implements Location
 		assert other instanceof RationalLocation;
 		if (this == other) return 0;
 		
-		final BigInteger first = m_numerator.multiply(((RationalLocation) other).getDenominator());
-		final BigInteger second = ((RationalLocation) other).getNumerator().multiply(m_denominator);
+		final BigInteger first = numerator.multiply(((RationalLocation) other).getDenominator());
+		final BigInteger second = ((RationalLocation) other).getNumerator().multiply(denominator);
 		return first.compareTo(second);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		if (m_hashCode == 0)
+		if (hashCode == 0)
 		{
-			m_hashCode = 31 * m_numerator.hashCode() + m_denominator.hashCode();
+			hashCode = 31 * numerator.hashCode() + denominator.hashCode();
 		}
 
-		return m_hashCode;
+		return hashCode;
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public final class RationalLocation implements Location
 		if (getClass() != that.getClass()) return false;
 
 		final RationalLocation other = (RationalLocation) that;
-		if (m_numerator != other.getNumerator()) return false;
-		if (m_denominator != other.getDenominator()) return false;
+		if (numerator != other.getNumerator()) return false;
+		if (denominator != other.getDenominator()) return false;
 
 		return true;
 	}
@@ -101,7 +101,7 @@ public final class RationalLocation implements Location
 	@Override
 	public String toString()
 	{
-		return m_numerator + "/" + m_denominator;
+		return numerator + "/" + denominator;
 	}
 
 	private BigInteger product(BigInteger first, BigInteger second, int index)
