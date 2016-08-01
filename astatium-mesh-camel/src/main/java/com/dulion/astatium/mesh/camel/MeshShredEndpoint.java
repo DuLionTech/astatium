@@ -25,12 +25,12 @@ import org.apache.camel.spi.UriEndpoint;
 import com.dulion.astatium.mesh.shredder.ContextManager;
 import com.dulion.astatium.mesh.shredder.XMLShredder;
 
-@UriEndpoint(scheme = "mesh", title = "Mesh", syntax = "mesh://name", producerOnly = true, label = "java,database")
-public class MeshEndpoint extends DefaultEndpoint {
+@UriEndpoint(scheme = "mesh", title = "Mesh", syntax = "mesh:type://name", producerOnly = true, label = "java,xml,json,database")
+public class MeshShredEndpoint extends DefaultEndpoint {
 
 	private final ContextManager manager;
 
-	public MeshEndpoint(String uri, Component component, ContextManager contextManager) {
+	public MeshShredEndpoint(String uri, Component component, ContextManager contextManager) {
 		super(uri, component);
 		this.manager = contextManager;
 	}
@@ -38,7 +38,7 @@ public class MeshEndpoint extends DefaultEndpoint {
 	@Override
 	public Producer createProducer() throws Exception {
 		// TODO: Select type of producer based on configuration
-		return new MeshProducer(this, new XMLShredder(manager));
+		return new MeshShredProducer(this, new XMLShredder(manager));
 	}
 
 	@Override

@@ -15,6 +15,8 @@
  */
 package com.dulion.astatium.mesh.camel;
 
+import static org.apache.camel.util.ObjectHelper.removeStartingCharacters;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -29,15 +31,17 @@ import com.dulion.astatium.mesh.shredder.ContextManager;
 
 public class MeshComponent extends UriEndpointComponent {
 
+	private static final String SHRED_PREFIX = "shred:";
+
 	private final ContextManager manager;
 
 	public MeshComponent() {
-		super(MeshEndpoint.class);
+		super(MeshShredEndpoint.class);
 		manager = contextManager();
 	}
 
 	public MeshComponent(CamelContext context) {
-		super(context, MeshEndpoint.class);
+		super(context, MeshShredEndpoint.class);
 		manager = contextManager();
 	}
 
@@ -46,9 +50,17 @@ public class MeshComponent extends UriEndpointComponent {
 	}
 
 	@Override
-	protected MeshEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters)
+	protected MeshShredEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters)
 			throws Exception {
-		MeshEndpoint endpoint = new MeshEndpoint(uri, this, manager);
+
+		MeshShredEndpoint endpoint;
+		if (remaining.startsWith(SHRED_PREFIX)) {
+			remaining = removeStartingCharacters(remaining.substring(SHRED_PREFIX.length()), '/');
+			endpoint = new MeshShredEndpoint(uri, this, manager);
+		} else {
+			throw new IllegalArgumentException("Unrecognized mesh action");
+		}
+
 		setProperties(endpoint, parameters);
 		return endpoint;
 	}

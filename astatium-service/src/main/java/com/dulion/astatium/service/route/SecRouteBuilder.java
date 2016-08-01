@@ -26,6 +26,7 @@ public class SecRouteBuilder extends RouteBuilder {
 
 	private void configureFilings() {
 		from("bridge://sec/filings")
-				.to("https4://www.sec.gov/Archives/edgar/usgaap.rss.xml");
+				.to("https4://www.sec.gov/Archives/edgar/usgaap.rss.xml")
+				.to("mesh:shred://usgaap/");
 	}
 }
