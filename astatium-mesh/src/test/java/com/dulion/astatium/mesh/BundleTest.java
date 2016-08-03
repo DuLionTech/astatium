@@ -53,7 +53,7 @@ public class BundleTest {
 		}
 		
 		@Bean
-		public ContextManager factory(ContextLoader loader, ContextBuilder builder) {
+		public MetaGraph factory(ContextLoader loader, ContextBuilder builder) {
 			return new ContextManager(loader, builder);
 		}
 		

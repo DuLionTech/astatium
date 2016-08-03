@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dulion.astatium.mesh.Context;
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.Location;
 import com.dulion.astatium.mesh.Range;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
@@ -50,7 +51,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-public class ContextManager
+public class ContextManager implements MetaGraph
 {
 	private final static Logger LOG = LoggerFactory.getLogger(ContextManager.class);
 

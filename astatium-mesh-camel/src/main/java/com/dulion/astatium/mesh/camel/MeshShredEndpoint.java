@@ -22,15 +22,15 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 
-import com.dulion.astatium.mesh.shredder.ContextManager;
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.shredder.XMLShredder;
 
 @UriEndpoint(scheme = "mesh", title = "Mesh", syntax = "mesh:type://name", producerOnly = true, label = "java,xml,json,database")
 public class MeshShredEndpoint extends DefaultEndpoint {
 
-	private final ContextManager manager;
+	private final MetaGraph manager;
 
-	public MeshShredEndpoint(String uri, Component component, ContextManager contextManager) {
+	public MeshShredEndpoint(String uri, Component component, MetaGraph contextManager) {
 		super(uri, component);
 		this.manager = contextManager;
 	}

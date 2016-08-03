@@ -23,6 +23,7 @@ import java.util.Set;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.UriEndpointComponent;
 
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextLoader;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
@@ -33,20 +34,20 @@ public class MeshComponent extends UriEndpointComponent {
 
 	private static final String SHRED_PREFIX = "shred:";
 
-	private final ContextManager manager;
+	private final MetaGraph metaGraph;
 
 	public MeshComponent() {
 		super(MeshShredEndpoint.class);
-		manager = contextManager();
+		metaGraph = metaGraph();
 	}
 
 	public MeshComponent(CamelContext context) {
 		super(context, MeshShredEndpoint.class);
-		manager = contextManager();
+		metaGraph = metaGraph();
 	}
 
-	public ContextManager getContextManager() {
-		return manager;
+	public MetaGraph getMetaGraph() {
+		return metaGraph;
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class MeshComponent extends UriEndpointComponent {
 		MeshShredEndpoint endpoint;
 		if (remaining.startsWith(SHRED_PREFIX)) {
 			remaining = removeStartingCharacters(remaining.substring(SHRED_PREFIX.length()), '/');
-			endpoint = new MeshShredEndpoint(uri, this, manager);
+			endpoint = new MeshShredEndpoint(uri, this, metaGraph);
 		} else {
 			throw new IllegalArgumentException("Unrecognized mesh action");
 		}
@@ -65,7 +66,7 @@ public class MeshComponent extends UriEndpointComponent {
 		return endpoint;
 	}
 
-	private ContextManager contextManager() {
+	private ContextManager metaGraph() {
 		Set<ContextManager> managers = getCamelContext().getRegistry().findByType(ContextManager.class);
 		if (managers.size() == 1) {
 			return managers.iterator().next();

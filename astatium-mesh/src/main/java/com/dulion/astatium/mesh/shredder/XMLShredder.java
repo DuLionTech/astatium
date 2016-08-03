@@ -26,47 +26,44 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.camel.Exchange;
 import org.apache.commons.lang3.StringUtils;
 
 import com.dulion.astatium.mesh.Context;
 import com.dulion.astatium.mesh.DataGraph;
 import com.dulion.astatium.mesh.DataNode;
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.Shredder;
 
 public class XMLShredder implements Shredder {
+
 	private final ContextManager manager;
 
-	private final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+	private final ThreadLocal<XMLInputFactory> factory;
 
-	public XMLShredder(ContextManager manager) {
-		this.manager = manager;
-		inputFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
-		inputFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-		inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);
+	public XMLShredder(MetaGraph metaGraph) {
+		this.manager = (ContextManager) metaGraph;
+		this.factory = ThreadLocal.withInitial(() -> {
+			XMLInputFactory factory = XMLInputFactory.newInstance();
+			factory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
+			factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
+			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);
+			return factory;
+		});
 	}
 
 	@Override
 	public DataGraph shred(InputStream in) throws XMLStreamException {
-		return shred(inputFactory.createXMLStreamReader(in));
+		return shred(factory.get().createXMLStreamReader(in));
 	}
 
 	@Override
 	public DataGraph shred(Reader in) throws XMLStreamException {
-		return shred(inputFactory.createXMLStreamReader(in));
+		return shred(factory.get().createXMLStreamReader(in));
 	}
-	
+
 	private DataGraph shred(XMLStreamReader stream) throws XMLStreamException {
 		DataNode[] items = new Instance(stream).shred();
 		return new DefaultDataGraph(manager, items, 0, items.length);
-	}
-
-	/**
-	 * Temporary method used for debugging and runtime interaction.
-	 */
-	@Override
-	public void rendezvous(Exchange exchange) {
-		manager.rendezvous();
 	}
 
 	private class Instance {

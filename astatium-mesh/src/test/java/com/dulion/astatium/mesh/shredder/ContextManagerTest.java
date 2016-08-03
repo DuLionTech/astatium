@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.dulion.astatium.mesh.Context;
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextLoader;
 import com.dulion.astatium.mesh.meta.memory.MemoryContextBuilder;
@@ -45,7 +46,7 @@ public class ContextManagerTest
 	static class SpringConfiguration
 	{
 		@Bean
-		public ContextManager factory(ContextLoader loader, ContextBuilder builder) {
+		public MetaGraph factory(ContextLoader loader, ContextBuilder builder) {
 			return new ContextManager(loader, builder);
 		}
 		
