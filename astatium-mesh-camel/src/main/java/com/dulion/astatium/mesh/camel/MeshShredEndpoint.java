@@ -23,7 +23,7 @@ import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 
 import com.dulion.astatium.mesh.MetaGraph;
-import com.dulion.astatium.mesh.shredder.XMLShredder;
+import com.dulion.astatium.mesh.shredder.XmlShredder;
 
 @UriEndpoint(scheme = "mesh", title = "Mesh", syntax = "mesh:type://name", producerOnly = true, label = "java,xml,json,database")
 public class MeshShredEndpoint extends DefaultEndpoint {
@@ -38,7 +38,7 @@ public class MeshShredEndpoint extends DefaultEndpoint {
 	@Override
 	public Producer createProducer() throws Exception {
 		// TODO: Select type of producer based on configuration
-		return new MeshShredProducer(this, new XMLShredder(manager));
+		return new MeshShredProducer(this, new XmlShredder(manager));
 	}
 
 	@Override
