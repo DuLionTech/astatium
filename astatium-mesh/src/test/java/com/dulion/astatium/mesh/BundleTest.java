@@ -48,7 +48,7 @@ public class BundleTest {
 	public static class ContextConfiguration {
 		
 		@Bean
-		public Shredder shredder(ContextManager factory) {
+		public Shredder shredder(MetaGraph factory) {
 			return new XMLShredder(factory);
 		}
 		

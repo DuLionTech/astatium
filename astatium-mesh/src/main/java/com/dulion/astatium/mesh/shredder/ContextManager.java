@@ -39,8 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dulion.astatium.mesh.Context;
-import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.Location;
+import com.dulion.astatium.mesh.MetaGraph;
 import com.dulion.astatium.mesh.Range;
 import com.dulion.astatium.mesh.meta.ContextBuilder;
 import com.dulion.astatium.mesh.meta.ContextData;
