@@ -74,4 +74,5 @@
       </plugin>
     </plugins>
   </build>
+  <name>Mesh</name>
 </project>

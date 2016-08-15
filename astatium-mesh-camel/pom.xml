@@ -36,4 +36,5 @@
       <artifactId>camel-core</artifactId>
     </dependency>
   </dependencies>
+  <name>Mesh Camel</name>
 </project>
