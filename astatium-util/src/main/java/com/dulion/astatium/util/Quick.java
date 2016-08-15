@@ -29,9 +29,9 @@ public class Quick<T> {
 
   private final int upper;
 
-  public static final List<Integer> allSorts = new ArrayList<>();
+  static final List<Integer> allSorts = new ArrayList<>();
 
-  public static final List<Integer> allSwaps = new ArrayList<>();
+  static final List<Integer> allSwaps = new ArrayList<>();
 
   private int sorts = 0;
 
