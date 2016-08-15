@@ -20,7 +20,7 @@
   <artifactId>astatium</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Astatium Project</name>
+  <name>Astatium</name>
   <url>http://www.dulion.com/astatium</url>
 
   <properties>

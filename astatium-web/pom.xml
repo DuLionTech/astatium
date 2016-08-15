@@ -23,4 +23,5 @@
     <relativePath>../astatium-parent</relativePath>
   </parent>
   <artifactId>astatium-web</artifactId>
+  <name>Web Content</name>
 </project>

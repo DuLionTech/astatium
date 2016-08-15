@@ -31,5 +31,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <name>Util</name>
+  <name>Utilities</name>
 </project>
