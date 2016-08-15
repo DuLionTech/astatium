@@ -26,6 +26,7 @@
     <camel.version>2.17.2</camel.version>
     <jackson.version>2.7.5</jackson.version>
     <google-guava.version>19.0</google-guava.version>
+    <checkstyle.version>7.1</checkstyle.version>
 
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -37,6 +38,8 @@
   </properties>
 
   <modules>
+    <module>astatium-build-tools</module>
+    <module>astatium-parent</module>
     <module>astatium-util</module>
     <module>astatium-bridge-camel</module>
     <module>astatium-service</module>
@@ -112,7 +115,7 @@
         <artifactId>guava</artifactId>
         <version>${google-guava.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
@@ -178,28 +181,6 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.17</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>checkstyle</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.4</version>
-      </plugin>
-    </plugins>
-  </reporting>
 
   <repositories>
     <repository>
