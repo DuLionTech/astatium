@@ -1,7 +1,8 @@
-/target/
 /.settings/
-/.classpath
-/.project
+/node/
 /node_modules/
 /typings/
+/target/
+/.classpath
+/.project
 /*.log
