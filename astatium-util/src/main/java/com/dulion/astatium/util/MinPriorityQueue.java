@@ -14,6 +14,7 @@
 
 package com.dulion.astatium.util;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -21,37 +22,43 @@ public class MinPriorityQueue<T> implements Iterable<T> {
 
   private static final int DEFAULT_SIZE = 8;
 
-  // private T[] queue;
+  private T[] queue;
 
-  // private final Comparator<T> comparator;
+  private final Comparator<T> comparator;
 
-  // private int size;
-
-  public MinPriorityQueue() {
-    this(DEFAULT_SIZE, null);
-  }
+  private int size;
 
   public MinPriorityQueue(Comparator<T> comparator) {
-    this(DEFAULT_SIZE, comparator);
+    this(comparator, DEFAULT_SIZE);
   }
 
-  public MinPriorityQueue(int initialCapacity) {
-    this(initialCapacity, null);
+  @SuppressWarnings("unchecked")
+  public MinPriorityQueue(Comparator<T> comparator, int initialCapacity) {
+    this.queue = (T[]) new Object[initialCapacity];
+    this.comparator = comparator;
+    this.size = 0;
   }
 
-  /**
-   * Initialize priority queue.
-   * 
-   * @param initialCapacity - initial size of priority queue.
-   * @param comparator - Function to use for comparing values.
-   */
-  public MinPriorityQueue(int initialCapacity, Comparator<T> comparator) {
-    // this.queue = (T[]) new Object[initialCapacity];
-    // this.comparator = comparator;
-    // this.size = 0;
+  public MinPriorityQueue<T> add(T item) {
+    ensureCapacity(size);
+
+    int lowerIndex = size++;
+    while (lowerIndex > 0) {
+      int upperIndex = (lowerIndex - 1) >> 1;
+      T upperItem = queue[upperIndex];
+      if (comparator.compare(item, upperItem) < 0) {
+        break;
+      }
+      queue[lowerIndex] = upperItem;
+      lowerIndex = upperIndex;
+    }
+    queue[lowerIndex] = item;
+
+    return this;
   }
 
-  public MinPriorityQueue<T> addAll(Iterable<T> iterable) {
+  public MinPriorityQueue<T> addAll(Collection<T> collection) {
+    collection.stream().forEach(this::add);
     return this;
   }
 
@@ -59,8 +66,13 @@ public class MinPriorityQueue<T> implements Iterable<T> {
     return null;
   }
 
-  public void ensureCapacity(int min) {
-
+  @SuppressWarnings("unchecked")
+  private void ensureCapacity(int min) {
+    if (min >= queue.length) {
+      T[] next = (T[]) new Object[queue.length * 2];
+      System.arraycopy(queue, 0, next, 0, queue.length);
+      queue = next;
+    }
   }
 
 }
