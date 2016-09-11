@@ -36,6 +36,10 @@
     </dependency>
     <dependency>
       <groupId>com.dulion</groupId>
+      <artifactId>astatium-mesh-camel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.dulion</groupId>
       <artifactId>astatium-web</artifactId>
     </dependency>
 

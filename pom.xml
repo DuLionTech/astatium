@@ -73,7 +73,12 @@
         <artifactId>astatium-web</artifactId>
         <version>${project.version}</version>
       </dependency>
-      
+      <dependency>
+        <groupId>com.dulion</groupId>
+        <artifactId>astatium-mesh-camel</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <!-- External Dependencies -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
