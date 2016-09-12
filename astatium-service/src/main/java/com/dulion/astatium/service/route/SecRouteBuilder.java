@@ -1,32 +1,61 @@
 /**
  * Copyright 2016 Phillip DuLion
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.dulion.astatium.service.route;
 
+import com.dulion.astatium.mesh.DataGraph;
+import com.dulion.astatium.mesh.DataNode;
+import com.dulion.astatium.service.model.sec.Filing;
+import com.dulion.astatium.service.model.sec.FilingList;
+
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+
+import java.util.stream.Collectors;
 
 public class SecRouteBuilder extends RouteBuilder {
 
-	@Override
-	public void configure() throws Exception {
-		configureFilings();
-	}
+  @Override
+  public void configure() throws Exception {
+    configureFilings();
+  }
 
-	private void configureFilings() {
-		from("bridge://sec/filings")
-				.to("https4://www.sec.gov/Archives/edgar/usgaap.rss.xml")
-				.to("mesh:shred://usgaap/");
-	}
+  private void configureFilings() {
+    from("bridge://sec/filings")
+        .setBody(constant(null))
+        .to("https4://www.sec.gov/Archives/edgar/usgaap.rss.xml")
+        .to("mesh:shred://usgaap/")
+        .process(this::createFilingList);
+  }
+
+  private void createFilingList(Exchange exchange) {
+    FilingList list = new FilingList();
+    list.getFilings().addAll(
+        exchange.getIn().getBody(DataGraph.class)
+            .find("{http://www.sec.gov/Archives/edgar}companyName")
+            .stream()
+            .map(this::mapFiling)
+            .collect(Collectors.toList()));
+    exchange.getOut().setBody(list, FilingList.class);
+  }
+
+  private Filing mapFiling(DataNode node) {
+    Filing filing = new Filing();
+    filing.setTitle(node.getText());
+    // TODO: Traverse data graph to children
+    filing.setDescription("10K");
+    filing.setPubDate("09/09/2016");
+    return filing;
+  }
 }
+

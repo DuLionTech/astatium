@@ -67,6 +67,6 @@ public class BridgeProducerHandler {
         	return null;
         }
 
-        return exchange.getIn().getBody(type);
+        return exchange.getOut().getBody(type);
 	}
 }
