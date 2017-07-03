@@ -12,7 +12,7 @@ public class AnagramTest {
 
   @Test
   public void anagramTest() {
-    String[] result = Anagram.produce("ABCDEFG");
+    String[] result = Anagram.produce("ABC");
     System.out.println(result.length);
 
     Set<String> items = new HashSet<>();

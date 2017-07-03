@@ -26,7 +26,7 @@ public class SubsetSum {
 
   private static class Instance {
 
-    private final int total;
+    private final int max;
 
     private final int[] values;
 
@@ -34,8 +34,8 @@ public class SubsetSum {
 
     private final List<int[]> solutions = new ArrayList<>();
 
-    public Instance(int total, int[] values) {
-      this.total = total;
+    public Instance(int max, int[] values) {
+      this.max = max;
       this.values = values;
       this.solution = new int[values.length];
     }
@@ -49,7 +49,7 @@ public class SubsetSum {
       if (index < values.length) {
         search(index + 1, size + 1, sum + (solution[size] = values[index]));
         search(index + 1, size, sum);
-      } else if (size > 0 && sum <= total) {
+      } else if (size > 0 && sum <= max) {
         solutions.add(Arrays.copyOf(solution, size));
       }
     }

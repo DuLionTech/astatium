@@ -40,13 +40,11 @@ public class Anagram {
 
     private void anagram(int length) {
       if (length < 2) {
+        anagrams.add(new String(sequence));
         return;
       }
 
       for (int i = 0; i < length; i++) {
-        if (length == 2) {
-          anagrams.add(new String(sequence));
-        }
         anagram(length - 1);
         rotate(length);
       }
