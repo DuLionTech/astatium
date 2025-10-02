@@ -1,3 +1,3 @@
 # Astatium
 
-A hierarchical data graph catalog service.
+An exploration of using fractional keys for capturing heirarchial graph data.
